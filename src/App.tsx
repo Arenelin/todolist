@@ -1,27 +1,16 @@
 import React from 'react';
 import './App.css';
+import {Header} from './01 - Nested components/Header';
+import {Body} from './01 - Nested components/Body';
+import {Footer} from './01 - Nested components/Footer';
 
 function App() {
     return (
-        <div className="App">
-            <div>
-                <h3>What to learn</h3>
-                <div>
-                    <input/>
-                    <button>+</button>
-                </div>
-                <ul>
-                    <li><input type="checkbox" checked={true}/> <span>HTML&CSS</span></li>
-                    <li><input type="checkbox" checked={true}/> <span>JS</span></li>
-                    <li><input type="checkbox" checked={false}/> <span>React</span></li>
-                </ul>
-                <div>
-                    <button>All</button>
-                    <button>Active</button>
-                    <button>Completed</button>
-                </div>
-            </div>
-        </div>
+        <>
+            <Header title="New Header"/>
+            <Body titleForBody="New Body"/>
+            <Footer titleForFooter="New Footer"/>
+        </>
     );
 }
 
