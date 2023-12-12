@@ -1,8 +1,11 @@
 type ButtonPropsType = {
     title: string
-    onClickHandler: () => void
+    callback: () => void
 }
 
 export function Button(props: ButtonPropsType) {
-    return <button onClick={props.onClickHandler}>{props.title}</button>
+    const onClickHandler = () => {
+        props.callback();
+    }
+    return <button onClick={onClickHandler}>{props.title}</button>
 }

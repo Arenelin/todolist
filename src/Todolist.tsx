@@ -6,7 +6,6 @@ export type TaskType = {
     id: number
     title: string
     isDone: boolean
-
 }
 
 type TodolistPropsType = {
@@ -23,7 +22,7 @@ export function Todolist(props: TodolistPropsType) {
             {props.tasks.map(t =>
                 <li key={t.id}>
                     <input type="checkbox" checked={t.isDone}/><span>{t.title}</span>
-                    <Button onClickHandler={() => props.removeTask(t.id)} title={'x'}></Button>
+                    <Button callback={() => props.removeTask(t.id)} title={'x'}/>
                 </li>)}
         </ul>
         : <p>Tasks list is empty</p>
@@ -33,14 +32,13 @@ export function Todolist(props: TodolistPropsType) {
             <h3>{props.title}</h3>
             <div>
                 <input/>
-                <Button title={'+'} onClickHandler={() => {
-                }}/>
+                <Button callback={() => {}} title={'+'}/>
             </div>
             {tasksList}
             <div>
-                <Button onClickHandler={() => props.filteredTasks('all')} title={'All'}/>
-                <Button onClickHandler={() => props.filteredTasks('active')} title={'Active'}/>
-                <Button onClickHandler={() => props.filteredTasks('completed')} title={'Completed'}/>
+                <Button callback={() => props.filteredTasks('all')} title={'All'}/>
+                <Button callback={() => props.filteredTasks('active')} title={'Active'}/>
+                <Button callback={() => props.filteredTasks('completed')} title={'Completed'}/>
             </div>
         </div>
     )

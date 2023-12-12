@@ -12,10 +12,10 @@ function App() {
         {id: 4, title: 'TypeScript', isDone: false},
     ]);
     const [filter, setFilter] = useState<FilterValuesType>('all')
-    //если меняем форму представления тасок (один и тот же список показываем в разных вариантах),
-    // значит не меняем исходный массив!!! То есть не осуществляем crud-операцию
 
-    const filteredTasks = (valueFilter:FilterValuesType) => {
+
+    //Фильтрация отображения задач в списке
+    const filteredTasks = (valueFilter: FilterValuesType) => {
         setFilter(valueFilter);
     }
 
@@ -26,6 +26,7 @@ function App() {
             : tasks;
 
 
+    //Удаление задачи из исходного списка
     const removeTask = (id: number) => {
         const clearedTasks = tasks.filter(t => t.id !== id);
         setTasks(clearedTasks);
