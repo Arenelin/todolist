@@ -1,31 +1,22 @@
-import React from 'react';
+import React, {useState} from 'react';
 import './App.css';
-import {Button} from './03 - Universal button/components/Button';
 
 function App() {
+    let [a, setA] = useState(1);
 
-    // const Button1Foo = (name: string) => {
-    //     console.log(`I am ${name}`)
-    // }
-    // const Button2Foo = (name: string) => {
-    //     console.log(`I am ${name}`)
-    // }
-    //
-    const buttonFoo = (subscriber: string, age: number, city: string) => {
-        console.log(`${subscriber}, ${age}. ${city}`)
+    const incrementData = () => {
+        setA(++a);
+        console.log(a);
     }
-
-    const showDefaultText = () => {
-        console.log('I am stupid button');
+    const clearData = () => {
+        setA(0);
     }
 
     return (
         <div className="App">
-            <Button callback={() => buttonFoo('Hello! I am Vasya', 21, 'I live in Minsk.')}
-                    name={'MyYouTubeChannel-1'}/>
-            <Button callback={() => buttonFoo('Hello! I am Ivan', 35, 'I live in Novosibirsk.')}
-                    name={'MyYouTubeChannel-2'}/>
-            <Button callback={showDefaultText} name={'Stupid button'}/>
+            <h1>{a}</h1>
+            <button onClick={incrementData}>+</button>
+            <button onClick={clearData}>Clear</button>
         </div>
 
     );
