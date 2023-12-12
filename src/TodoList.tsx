@@ -20,7 +20,7 @@ export function TodoList(props: TodoListPropsType) {
     const listItems: JSX.Element = props.tasks.length
         ? <ul>
             {props.tasks.map(t =>
-                <li>
+                <li key={t.id}>
                     <input type="checkbox" checked={t.isDone}/> <span>{t.title}</span>
                     <Button title={'x'} callback={() => props.removeTask(t.id)}/>
                 </li>)}

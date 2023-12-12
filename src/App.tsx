@@ -22,7 +22,7 @@ function App() {
     const filteredTasks = (filterValue: FilterValuesType) => {
         setFilter(filterValue);
     }
-    const tasksForTodolist:Array<TaskType> = filter === 'active'
+    const tasksForTodolist: Array<TaskType> = filter === 'active'
         ? tasks.filter(t => !t.isDone)
         : filter === 'completed'
             ? tasks.filter(t => t.isDone)
@@ -30,7 +30,10 @@ function App() {
 
     return (
         <div className="App">
-            <TodoList title="What to learn" tasks={tasksForTodolist} removeTask={removeTask} filteredTasks={filteredTasks}/>
+            <TodoList title="What to learn"
+                      tasks={tasksForTodolist}
+                      removeTask={removeTask}
+                      filteredTasks={filteredTasks}/>
         </div>
     );
 }
