@@ -5,7 +5,7 @@ import {TaskType, TodoList} from './TodoList';
 export type FilterValuesType = 'all' | 'active' | 'completed'
 
 function App() {
-    const [tasks, setTasks] = useState<Array<TaskType>>([
+    const [tasks, setTasks] = useState<TaskType[]>([
         {id: 1, title: 'HTML&CSS', isDone: true},
         {id: 2, title: 'JavaScript', isDone: true},
         {id: 3, title: 'React&TypeScript', isDone: false},
@@ -22,7 +22,7 @@ function App() {
     const filteredTasks = (filterValue: FilterValuesType) => {
         setFilter(filterValue);
     }
-    const tasksForTodolist: Array<TaskType> = filter === 'active'
+    const tasksForTodolist: TaskType[] = filter === 'active'
         ? tasks.filter(t => !t.isDone)
         : filter === 'completed'
             ? tasks.filter(t => t.isDone)
