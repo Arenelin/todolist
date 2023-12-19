@@ -3,18 +3,16 @@ import './App.css';
 import {TaskType, Todolist} from './Todolist';
 import {v1} from 'uuid';
 
-
 export type FilterValuesType = 'all' | 'active' | 'completed';
 
 function App() {
-    const [tasks, setTasks] = useState<Array<TaskType>>([
+    const [tasks, setTasks] = useState<TaskType[]>([
         {id: v1(), title: 'HTML&CSS', isDone: true},
         {id: v1(), title: 'JavaScript', isDone: true},
         {id: v1(), title: 'React', isDone: false},
         {id: v1(), title: 'TypeScript', isDone: false},
     ]);
     const [filter, setFilter] = useState<FilterValuesType>('all')
-
 
     //Добавление задачи в исходный список
     const addTask = (titleValue: string) => {
@@ -34,7 +32,7 @@ function App() {
         setFilter(valueFilter);
     }
 
-    let tasksForTodolist: Array<TaskType> = filter === 'active'
+    let tasksForTodolist: TaskType[] = filter === 'active'
         ? tasks.filter(t => !t.isDone)
         : filter === 'completed'
             ? tasks.filter(t => t.isDone)

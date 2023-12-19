@@ -10,30 +10,26 @@ export type TaskType = {
 
 type TodolistPropsType = {
     title: string
-    tasks: Array<TaskType>
+    tasks: TaskType[]
     removeTask: (id: string) => void
     filteredTasks: (valueFilter: FilterValuesType) => void
     addTask: (titleValue: string) => void
 }
 
-
 export function Todolist(props: TodolistPropsType) {
-
     const [taskTitle, setTaskTitle] = useState('')
 
     const tasksList: JSX.Element = props.tasks.length
         ? <ul>
-            {props.tasks.map(t =>
-                <li key={t.id}>
+            {props.tasks.map(t => {
+                const onClickRemoveTaskHandler = () => props.removeTask(t.id);
+                return (<li key={t.id}>
                     <input type="checkbox" checked={t.isDone}/><span>{t.title}</span>
-                    <Button callback={() => props.removeTask(t.id)} title={'x'}/>
-                </li>)}
+                    <Button callback={onClickRemoveTaskHandler} title={'x'}/>
+                </li>)
+            })}
         </ul>
         : <p>Tasks list is empty</p>
-
-    // const onChangeSetTaskTitle = (e:) => {
-    //
-    // }
 
     const addTaskOnKeyDownHandler = (e: KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter' && taskTitle) {
@@ -41,13 +37,14 @@ export function Todolist(props: TodolistPropsType) {
         }
     }
 
-    //handler - называют функции, которые обрабатывают событие, обязательно делать такую приписку для подобных функций, чтобы их визуально отличать от обычных вычислительных функций
-    
+    //handler - называют функции, которые обрабатывают событие, обязательно делать такую приписку для подобных функций,
+    // чтобы их визуально отличать от обычных вычислительных функций
+
     const addTaskHandler = () => {
         const trimmedTaskTitle = taskTitle.trim();
-        if (trimmedTaskTitle){
+        if (trimmedTaskTitle) {
             props.addTask(taskTitle);
-        } else{
+        } else {
             alert('У тебя одни пробелы')
         }
         setTaskTitle('');
