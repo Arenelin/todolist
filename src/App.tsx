@@ -1,18 +1,33 @@
 import React, {useState} from 'react';
 import './App.css';
 import {TaskType, Todolist} from './Todolist';
+import {v1} from 'uuid';
+
 
 export type FilterValuesType = 'all' | 'active' | 'completed';
 
 function App() {
     const [tasks, setTasks] = useState<Array<TaskType>>([
-        {id: 1, title: 'HTML&CSS', isDone: true},
-        {id: 2, title: 'JavaScript', isDone: true},
-        {id: 3, title: 'React', isDone: false},
-        {id: 4, title: 'TypeScript', isDone: false},
+        {id: v1(), title: 'HTML&CSS', isDone: true},
+        {id: v1(), title: 'JavaScript', isDone: true},
+        {id: v1(), title: 'React', isDone: false},
+        {id: v1(), title: 'TypeScript', isDone: false},
     ]);
     const [filter, setFilter] = useState<FilterValuesType>('all')
 
+
+    //Добавление задачи в исходный список
+    const addTask = (titleValue: string) => {
+        const newTask: TaskType = {id: v1(), title: titleValue, isDone: false};
+        const newTasks: TaskType[] = [newTask, ...tasks];
+        setTasks(newTasks);
+    }
+
+    //Удаление задачи из исходного списка
+    const removeTask = (id: string) => {
+        const clearedTasks = tasks.filter(t => t.id !== id);
+        setTasks(clearedTasks);
+    }
 
     //Фильтрация отображения задач в списке
     const filteredTasks = (valueFilter: FilterValuesType) => {
@@ -25,13 +40,6 @@ function App() {
             ? tasks.filter(t => t.isDone)
             : tasks;
 
-
-    //Удаление задачи из исходного списка
-    const removeTask = (id: number) => {
-        const clearedTasks = tasks.filter(t => t.id !== id);
-        setTasks(clearedTasks);
-    }
-
     return (
         <div className="App">
             <Todolist
@@ -39,6 +47,7 @@ function App() {
                 tasks={tasksForTodolist}
                 removeTask={removeTask}
                 filteredTasks={filteredTasks}
+                addTask={addTask}
             />
         </div>
     );

@@ -1,4 +1,4 @@
-import React, {useState, KeyboardEvent} from 'react';
+import React, {useRef} from 'react';
 import {Button} from './Button';
 import {FilterValuesType} from './App';
 
@@ -11,6 +11,7 @@ export type TaskType = {
 type TodolistPropsType = {
     title: string
     tasks: Array<TaskType>
+
     removeTask: (id: string) => void
     filteredTasks: (valueFilter: FilterValuesType) => void
     addTask: (titleValue: string) => void
@@ -18,8 +19,7 @@ type TodolistPropsType = {
 
 
 export function Todolist(props: TodolistPropsType) {
-
-    const [taskTitle, setTaskTitle] = useState('')
+    const taskTitleInput = useRef<HTMLInputElement>(null);
 
     const tasksList: JSX.Element = props.tasks.length
         ? <ul>
@@ -31,35 +31,19 @@ export function Todolist(props: TodolistPropsType) {
         </ul>
         : <p>Tasks list is empty</p>
 
-    // const onChangeSetTaskTitle = (e:) => {
-    //
-    // }
-
-    const addTaskOnKeyDownHandler = (e: KeyboardEvent<HTMLInputElement>) => {
-        if (e.key === 'Enter' && taskTitle) {
-            addTaskHandler()
-        }
-    }
-
-    //handler - называют функции, которые обрабатывают событие, обязательно делать такую приписку для подобных функций, чтобы их визуально отличать от обычных вычислительных функций
-    
     const addTaskHandler = () => {
-        const trimmedTaskTitle = taskTitle.trim();
-        if (trimmedTaskTitle){
-            props.addTask(taskTitle);
-        } else{
-            alert('У тебя одни пробелы')
+        if (taskTitleInput.current) {
+            const newTaskTitle = taskTitleInput.current.value;
+            props.addTask(newTaskTitle);
+            taskTitleInput.current.value = '';
         }
-        setTaskTitle('');
     }
-
     return (
         <div className="todoList">
             <h3>{props.title}</h3>
             <div>
-                <input value={taskTitle} onChange={(e) => setTaskTitle(e.currentTarget.value)}
-                       onKeyDown={addTaskOnKeyDownHandler}/>
-                <Button callback={addTaskHandler} title={'+'} isDisabled={!taskTitle}/>
+                <input ref={taskTitleInput}/>
+                <Button callback={addTaskHandler} title={'+'}/>
             </div>
             {tasksList}
             <div>
