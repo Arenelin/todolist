@@ -6,7 +6,6 @@ import {v1} from 'uuid';
 export type FilterValuesType = 'all' | 'active' | 'completed';
 
 function App() {
-
     const [tasks, setTasks] = useState<TaskType[]>([
         {id: v1(), title: 'CSS', isDone: true},
         {id: v1(), title: 'JS', isDone: true},
@@ -20,6 +19,20 @@ function App() {
         const newTask: TaskType = {id: v1(), title: title, isDone: false};
         const newTasks: TaskType[] = [newTask, ...tasks];
         setTasks(newTasks);
+    }
+
+    //Обновляем статус задачи, изменяя данные одного объекта в массиве,
+    //тем самым изменяя исходный массив - crud-операция
+    // const updateTaskStatus = (id: string) => {
+    //     const updatedTasks = tasks.map(t => t.id === id ? {...t, isDone: !t.isDone} : t);
+    //     setTasks(updatedTasks);
+    // }
+    const changeStatus = (taskId: string, isDone: boolean) => {
+        let task = tasks.find(t => t.id === taskId);
+        if (task) {
+            task.isDone = isDone;
+        }
+        setTasks([...tasks]);
     }
 
     //Если мы добавляем или удаляем задачу, то изменяем именно исходный массив,
@@ -47,11 +60,14 @@ function App() {
             <TodoList
                 title="What to learn"
                 tasks={tasksForTodoList}
+                filter={filter}
                 removeTask={removeTask}
                 changeFilter={changeFilter}
                 addTask={addTask}
+                changeTaskStatus={changeStatus}
             />
         </div>
     );
 }
+
 export default App;
