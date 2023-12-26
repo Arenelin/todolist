@@ -13,3 +13,26 @@
   background-color: antiquewhite;
   padding: 15px;
 }
+
+.task-is-done{
+  opacity: 0.5;
+  text-decoration: line-through;
+}
+.task{
+  font-weight: 600;
+}
+.btn-active{
+  background-color: blueviolet;
+  color: white;
+  border-radius: 5px;
+  border: 3px solid blueviolet;
+  cursor: pointer;
+}
+
+.input-error{
+  border: 2px solid red;
+  outline: none;
+}
+.error{
+  color: red;
+}

@@ -1,4 +1,4 @@
-import React, {useState, KeyboardEvent} from 'react';
+import React, {useState, KeyboardEvent, ChangeEvent} from 'react';
 import {Button} from './Button';
 import {FilterValuesType} from './App';
 
@@ -11,20 +11,28 @@ export type TaskType = {
 type TodolistPropsType = {
     title: string
     tasks: TaskType[]
+    filter: FilterValuesType
     removeTask: (id: string) => void
     filteredTasks: (valueFilter: FilterValuesType) => void
     addTask: (titleValue: string) => void
+    changeTaskStatus: (taskId: string, newIsDoneValue: boolean) => void
 }
 
 export function Todolist(props: TodolistPropsType) {
-    const [taskTitle, setTaskTitle] = useState('')
+    const [taskTitle, setTaskTitle] = useState('');
+    const [inputError, setInputError] = useState(false)
 
     const tasksList: JSX.Element = props.tasks.length
         ? <ul>
             {props.tasks.map(t => {
                 const onClickRemoveTaskHandler = () => props.removeTask(t.id);
-                return (<li key={t.id}>
-                    <input type="checkbox" checked={t.isDone}/><span>{t.title}</span>
+                const onChangeTaskStatus = (e: ChangeEvent<HTMLInputElement>) => props.changeTaskStatus(t.id, e.currentTarget.checked);
+                return (<li key={t.id} className={t.isDone ? 'task-is-done' : 'task'}>
+                    <input
+                        type="checkbox"
+                        checked={t.isDone}
+                        onChange={onChangeTaskStatus}/>
+                    <span>{t.title}</span>
                     <Button callback={onClickRemoveTaskHandler} title={'x'}/>
                 </li>)
             })}
@@ -33,7 +41,7 @@ export function Todolist(props: TodolistPropsType) {
 
     const addTaskOnKeyDownHandler = (e: KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter' && taskTitle) {
-            addTaskHandler()
+            addTaskHandler();
         }
     }
 
@@ -41,28 +49,47 @@ export function Todolist(props: TodolistPropsType) {
     // чтобы их визуально отличать от обычных вычислительных функций
 
     const addTaskHandler = () => {
-        const trimmedTaskTitle = taskTitle.trim();
-        if (trimmedTaskTitle) {
-            props.addTask(taskTitle);
+        if (taskTitle.trim()) {
+            props.addTask(taskTitle.trim());
+
         } else {
-            alert('У тебя одни пробелы')
+            setInputError(true);
         }
         setTaskTitle('');
+    };
+
+    const onChangeTaskTitle = (e: ChangeEvent<HTMLInputElement>) => {
+        setTaskTitle(e.currentTarget.value)
+        inputError && setInputError(false);
     }
 
     return (
         <div className="todoList">
             <h3>{props.title}</h3>
             <div>
-                <input value={taskTitle} onChange={(e) => setTaskTitle(e.currentTarget.value)}
-                       onKeyDown={addTaskOnKeyDownHandler}/>
+                <input value={taskTitle}
+                       onChange={onChangeTaskTitle}
+                       onKeyDown={addTaskOnKeyDownHandler}
+                       className={inputError ? 'input-error' : ''}
+                />
+
                 <Button callback={addTaskHandler} title={'+'} isDisabled={!taskTitle}/>
             </div>
+            {inputError && <div className={'error'}>Error: title is required</div>}
             {tasksList}
             <div>
-                <Button callback={() => props.filteredTasks('all')} title={'All'}/>
-                <Button callback={() => props.filteredTasks('active')} title={'Active'}/>
-                <Button callback={() => props.filteredTasks('completed')} title={'Completed'}/>
+                <Button className={props.filter === 'all' ? 'btn-active' : ''}
+                        callback={() => props.filteredTasks('all')}
+                        title={'All'}
+                />
+                <Button className={props.filter === 'active' ? 'btn-active' : ''}
+                        callback={() => props.filteredTasks('active')}
+                        title={'Active'}
+                />
+                <Button className={props.filter === 'completed' ? 'btn-active' : ''}
+                        callback={() => props.filteredTasks('completed')}
+                        title={'Completed'}
+                />
             </div>
         </div>
     )

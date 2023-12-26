@@ -12,13 +12,21 @@ function App() {
         {id: v1(), title: 'React', isDone: false},
         {id: v1(), title: 'TypeScript', isDone: false},
     ]);
-    const [filter, setFilter] = useState<FilterValuesType>('all')
+    const [filter, setFilter] = useState<FilterValuesType>('all');
 
     //Добавление задачи в исходный список
     const addTask = (titleValue: string) => {
         const newTask: TaskType = {id: v1(), title: titleValue, isDone: false};
         const newTasks: TaskType[] = [newTask, ...tasks];
         setTasks(newTasks);
+    }
+
+    //Сменить статус конкретной задачи. Используем именно приходящее значение,
+    // так как статус задачи может быть не в двух значениях, а, например, в трех. И извне мы будем определять, какой у таски статус
+    //Здесь именно лучше юзать map, а не мутабельно изменять значение через find
+    const changeTaskStatus = (taskId: string, newIsDoneValue: boolean) => {
+        const nextState: TaskType[] = tasks.map(t => t.id === taskId ? {...t, isDone: newIsDoneValue} : t);
+        setTasks(nextState);
     }
 
     //Удаление задачи из исходного списка
@@ -43,9 +51,11 @@ function App() {
             <Todolist
                 title="What to learn"
                 tasks={tasksForTodolist}
+                filter={filter}
                 removeTask={removeTask}
                 filteredTasks={filteredTasks}
                 addTask={addTask}
+                changeTaskStatus={changeTaskStatus}
             />
         </div>
     );
