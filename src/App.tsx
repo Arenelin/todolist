@@ -3,7 +3,7 @@ import './App.css';
 import {TaskType, TodoList} from './TodoList';
 import {v1} from 'uuid';
 
-export type FilterValuesType = 'all' | 'active' | 'completed'
+export type FilterValuesType = 'all' | 'active' | 'completed';
 
 function App() {
     const [tasks, setTasks] = useState<TaskType[]>([
@@ -18,6 +18,12 @@ function App() {
         const newTask: TaskType = {id: v1(), title: titleValue, isDone: false};
         const newTasksList: TaskType[] = [newTask, ...tasks];
         setTasks(newTasksList);
+    }
+
+    //Сменить статус задачи (crud-операция). На её месте может быть любой апдейт.
+    const changeTaskStatus = (taskId: string, newIsDoneValue: boolean) => {
+        const newTasks = tasks.map(t => t.id === taskId ? {...t, isDone: newIsDoneValue} : t);
+        setTasks(newTasks);
     }
 
     //Удаление задачи из списка (crud-операция)
@@ -40,9 +46,11 @@ function App() {
         <div className="App">
             <TodoList title="What to learn"
                       tasks={tasksForTodolist}
+                      filter={filter}
                       removeTask={removeTask}
                       filteredTasks={filteredTasks}
                       addTask={addTask}
+                      changeTaskStatus={changeTaskStatus}
             />
         </div>
     );

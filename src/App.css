@@ -13,3 +13,22 @@
   background-color: antiquewhite;
   padding: 15px;
 }
+.error{
+  color: red;
+}
+.error-input{
+  border: 2px solid red;
+  outline: red;
+}
+
+.task-is-done{
+  opacity: 0.5;
+  text-decoration: line-through;
+}
+
+.btn-active{
+  background-color: blueviolet;
+  color: #ffffff;
+  border-radius: 5px;
+  border: 2px solid blueviolet;
+}
