@@ -9,13 +9,15 @@ export type TaskType = {
 }
 
 type TodoListPropsType = {
+    id: string
     title: string
     tasks: TaskType[]
     filter: FilterValuesType
-    removeTask: (id: string) => void
-    changeFilter: (value: FilterValuesType) => void
-    addTask: (title: string) => void
-    changeTaskStatus: (taskId: string, isDone: boolean) => void
+    removeTask: (id: string, todolistId: string) => void
+    changeFilter: (value: FilterValuesType, todolistId: string) => void
+    addTask: (title: string, todolistId: string) => void
+    changeTaskStatus: (taskId: string, newTaskStatus: boolean, todolistId: string) => void
+    removeTodolist: (todolistId: string) => void
 }
 
 export function TodoList(props: TodoListPropsType) {
@@ -31,9 +33,9 @@ export function TodoList(props: TodoListPropsType) {
     //Запустить функцию добавления задачи с помощью 'Enter'
     const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
         if (e.charCode === 13 && newTaskTitle.trim()) {
-            props.addTask(newTaskTitle.trim());
+            props.addTask(newTaskTitle.trim(), props.id);
             setNewTaskTitle('');
-        } else{
+        } else {
             setError('Title is required');
         }
     }
@@ -41,7 +43,7 @@ export function TodoList(props: TodoListPropsType) {
     //Добавить задачу в список
     const addTask = () => {
         if (newTaskTitle.trim()) {
-            props.addTask(newTaskTitle.trim());
+            props.addTask(newTaskTitle.trim(), props.id);
             setNewTaskTitle('');
         } else {
             setError('Title is required');
@@ -51,19 +53,19 @@ export function TodoList(props: TodoListPropsType) {
 
     //Сменить фильтр отображения списка задач
     const changeFilter = (filterValue: FilterValuesType) => {
-        props.changeFilter(filterValue);
+        props.changeFilter(filterValue, props.id);
     }
 
     const tasksList: JSX.Element[] = props.tasks.map(t => {
 
             //Удалить задачу из списка
             const onRemoveHandler = () => {
-                props.removeTask(t.id)
+                props.removeTask(t.id, props.id)
             }
 
             //Изменить статус задачи на противоположный
             const onChangeStatusTaskHandler = (e: ChangeEvent<HTMLInputElement>) => {
-                props.changeTaskStatus(t.id, e.currentTarget.checked);
+                props.changeTaskStatus(t.id, e.currentTarget.checked, props.id);
             }
             return <li key={t.id} className={t.isDone ? 'is-done' : ''}>
                 <input checked={t.isDone} type="checkbox" onChange={onChangeStatusTaskHandler}/>
@@ -73,9 +75,13 @@ export function TodoList(props: TodoListPropsType) {
         }
     );
 
+    const onClickRemoveTodolist = () => {
+        props.removeTodolist(props.id);
+    }
+
     return (
         <div>
-            <h3>{props.title}</h3>
+            <h3>{props.title} <Button name={'x'} callback={onClickRemoveTodolist}/></h3>
             <div>
                 <input value={newTaskTitle}
                        onChange={onNewTitleChangeHandler}
