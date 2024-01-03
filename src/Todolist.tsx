@@ -8,28 +8,44 @@ export type TaskType = {
     isDone: boolean
 }
 
-type TodolistPropsType = {
-    todolistId:string
+type TodolistProps = {
+    todolistId: string
     title: string
     tasks: TaskType[]
     filter: FilterValuesType
-    removeTask: (todolistId:string, taskId: string) => void
-    filteredTasks: (todolistId:string, valueFilter: FilterValuesType) => void
-    addTask: (todolistId:string, titleValue: string) => void
-    changeTaskStatus: (todolistId:string, taskId: string, newIsDoneValue: boolean) => void
-    removeTodolist: (todolistId:string)=>void
+    removeTask: (todolistId: string, taskId: string) => void
+    filteredTasks: (todolistId: string, valueFilter: FilterValuesType) => void
+    addTask: (todolistId: string, titleValue: string) => void
+    changeTaskStatus: (todolistId: string, taskId: string, newIsDoneValue: boolean) => void
+    removeTodolist: (todolistId: string) => void
 }
 
-export function Todolist(props: TodolistPropsType) {
-    const tasksForTodolist = tl.filter === 'active' ? tasks[tl.id].filter(t=> !t.isDone) : tl.filter === 'completed' ? tasks[tl.id].filter(t=>t.isDone) : tasks[tl.id]
+export const Todolist: React.FC<TodolistProps> = (props) => {
+    const {
+        todolistId,
+        title,
+        tasks,
+        filter,
+        removeTask,
+        filteredTasks,
+        addTask,
+        changeTaskStatus,
+        removeTodolist
+    } = props;
     const [taskTitle, setTaskTitle] = useState('');
-    const [inputError, setInputError] = useState(false)
+    const [inputError, setInputError] = useState(false);
 
-    const tasksList: JSX.Element = props.tasks.length
+    const tasksForTodolist = filter === 'active'
+        ? tasks.filter(t => !t.isDone)
+        : filter === 'completed'
+            ? tasks.filter(t => t.isDone)
+            : tasks
+
+    const tasksList: JSX.Element = tasksForTodolist.length
         ? <ul>
-            {props.tasks.map(t => {
-                const onClickRemoveTaskHandler = () => props.removeTask(props.todolistId, t.id);
-                const onChangeTaskStatus = (e: ChangeEvent<HTMLInputElement>) => props.changeTaskStatus(props.todolistId, t.id, e.currentTarget.checked);
+            {tasksForTodolist.map(t => {
+                const onClickRemoveTaskHandler = () => removeTask(todolistId, t.id);
+                const onChangeTaskStatus = (e: ChangeEvent<HTMLInputElement>) => changeTaskStatus(todolistId, t.id, e.currentTarget.checked);
                 return (<li key={t.id} className={t.isDone ? 'task-is-done' : 'task'}>
                     <input
                         type="checkbox"
@@ -48,12 +64,9 @@ export function Todolist(props: TodolistPropsType) {
         }
     }
 
-    //handler - называют функции, которые обрабатывают событие, обязательно делать такую приписку для подобных функций,
-    // чтобы их визуально отличать от обычных вычислительных функций
-
     const addTaskHandler = () => {
         if (taskTitle.trim()) {
-            props.addTask(props.todolistId, taskTitle.trim());
+            addTask(todolistId, taskTitle.trim());
 
         } else {
             setInputError(true);
@@ -66,13 +79,13 @@ export function Todolist(props: TodolistPropsType) {
         inputError && setInputError(false);
     }
 
-    const removeTodolistHandler = ()=>{
-        props.removeTodolist(props.todolistId);
+    const removeTodolistHandler = () => {
+        removeTodolist(todolistId);
     }
 
     return (
         <div className="todoList">
-            <h3>{props.title} <Button title={'x'} callback={removeTodolistHandler}/></h3>
+            <h3>{title} <Button title={'x'} callback={removeTodolistHandler}/></h3>
             <div>
                 <input value={taskTitle}
                        onChange={onChangeTaskTitle}
@@ -85,16 +98,16 @@ export function Todolist(props: TodolistPropsType) {
             {inputError && <div className={'error'}>Error: title is required</div>}
             {tasksList}
             <div>
-                <Button className={props.filter === 'all' ? 'btn-active' : ''}
-                        callback={() => props.filteredTasks(props.todolistId, 'all')}
+                <Button className={filter === 'all' ? 'btn-active' : ''}
+                        callback={() => filteredTasks(todolistId, 'all')}
                         title={'All'}
                 />
-                <Button className={props.filter === 'active' ? 'btn-active' : ''}
-                        callback={() => props.filteredTasks(props.todolistId, 'active')}
+                <Button className={filter === 'active' ? 'btn-active' : ''}
+                        callback={() => filteredTasks(todolistId, 'active')}
                         title={'Active'}
                 />
-                <Button className={props.filter === 'completed' ? 'btn-active' : ''}
-                        callback={() => props.filteredTasks(props.todolistId, 'completed')}
+                <Button className={filter === 'completed' ? 'btn-active' : ''}
+                        callback={() => filteredTasks(todolistId, 'completed')}
                         title={'Completed'}
                 />
             </div>
