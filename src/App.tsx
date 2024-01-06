@@ -2,13 +2,18 @@ import React, {useState} from 'react';
 import './App.css';
 import {TaskType, TodoList} from './TodoList';
 import {v1} from 'uuid';
+import {AddItemForm} from './components/AddItemForm';
 
-export type FilterValuesType = 'all' | 'active' | 'completed';
+export type FilterValues = 'all' | 'active' | 'completed';
 
 type TodolistType = {
     id: string
     title: string
-    filter: FilterValuesType
+    filter: FilterValues
+}
+
+type TasksState = {
+    [key: string]: TaskType[]
 }
 
 function App() {
@@ -23,7 +28,7 @@ function App() {
     ]);
 
     //Стейт с тасками для каждого тудулиста в отдельности
-    const [tasksObj, setTasksObj] = useState({
+    const [tasksObj, setTasksObj] = useState<TasksState>({
         [todolist_1]: [
             {id: v1(), title: 'CSS', isDone: true},
             {id: v1(), title: 'JS', isDone: true},
@@ -38,67 +43,77 @@ function App() {
 
     //Добавление новой таски в конкретный тудулист
     function addTask(title: string, todolistId: string) {
-        const newTask: TaskType = {id: v1(), title: title, isDone: false};
-        const newTasksForCurrentTodolist: TaskType[] = [newTask, ...tasksObj[todolistId]];
-        setTasksObj({...tasksObj, [todolistId]: newTasksForCurrentTodolist});
+        setTasksObj({...tasksObj, [todolistId]: [...tasksObj[todolistId], {id: v1(), title, isDone: false}]});
     }
 
     //Смена статуса таски в конкретном тудулисте
     const changeStatus = (taskId: string, newTaskStatus: boolean, todolistId: string) => {
-        const newUpdatedTasksForCurrentTodolist = tasksObj[todolistId].map(tl =>
-            tl.id === taskId
-                ? {...tl, isDone: newTaskStatus}
-                : tl);
-        setTasksObj({...tasksObj, [todolistId]: newUpdatedTasksForCurrentTodolist});
+        setTasksObj({
+            ...tasksObj, [todolistId]: tasksObj[todolistId].map(t => t.id === taskId
+                ? {...t, isDone: newTaskStatus}
+                : t)
+        });
     }
 
     //Удаление таски из конкретного тудулиста
     function removeTask(id: string, todolistId: string) {
-        const clearedTasks = tasksObj[todolistId].filter(t => t.id !== id);
-        setTasksObj({...tasksObj, [todolistId]: clearedTasks});
+        setTasksObj({...tasksObj, [todolistId]: tasksObj[todolistId].filter(t => t.id !== id)});
     }
 
     //Фильтрация отображения тасок в конкретном тудулисте
-    function changeFilter(value: FilterValuesType, todolistId: string) {
-        const updatedTodolists = todolists.map(tl => tl.id === todolistId ? {...tl, filter: value} : tl);
-        setTodolists(updatedTodolists);
+    function changeFilter(value: FilterValues, todolistId: string) {
+        setTodolists(todolists.map(tl => tl.id === todolistId ? {...tl, filter: value} : tl));
     }
 
     //Удаление конкретного тудулиста
     const removeTodolist = (todolistId: string) => {
-        const clearedTodolists = todolists.filter(tl => tl.id !== todolistId);
-        setTodolists(clearedTodolists);
-        const clearedTasksObj = {...tasksObj};
-        delete clearedTasksObj[todolistId];
-        setTasksObj(clearedTasksObj);
+        setTodolists(todolists.filter(tl => tl.id !== todolistId));
+        delete tasksObj[todolistId];
+    }
+
+    //Добавление нового тудулиста
+    const addNewTodolist = (title: string) => {
+        const idNewTodolist = v1();
+        setTodolists([...todolists, {id: idNewTodolist, title, filter: 'all'}]);
+        setTasksObj({...tasksObj, [idNewTodolist]: []});
+    }
+
+    //Смена названия таски в конкретном тудулисте
+    const changeTaskTitle = (title: string, todolistId: string, taskId: string) => {
+        setTasksObj({
+            ...tasksObj, [todolistId]: tasksObj[todolistId].map(t =>
+                t.id === taskId ? {...t, title} : t)
+        });
+    }
+
+    //Смена заголовка конкретного тудулиста
+    const changeTodolistTitle = (newTodolistTitle: string, todolistId: string,) => {
+        setTodolists(todolists.map(tl => tl.id === todolistId ? {...tl, title: newTodolistTitle} : tl));
     }
 
     return (
         <div className="App">
+            <AddItemForm callback={addNewTodolist}/>
             {todolists.map(tl => {
-                    //Фильтрация отображения тасок, в зависимости от свойства filter в конкретном тудулисте
-                    let tasksForTodoList: TaskType[] = tasksObj[tl.id];
-                    if (tl.filter === 'active') {
-                        tasksForTodoList = tasksForTodoList.filter(t => !t.isDone);
-                    } else if (tl.filter === 'completed') {
-                        tasksForTodoList = tasksForTodoList.filter(t => t.isDone);
-                    }
                     return (
                         <TodoList
                             key={tl.id}
-                            id={tl.id}
+                            todolistId={tl.id}
                             title={tl.title}
-                            tasks={tasksForTodoList}
+                            tasks={tasksObj[tl.id]}
                             filter={tl.filter}
                             removeTask={removeTask}
                             changeFilter={changeFilter}
                             addTask={addTask}
                             changeTaskStatus={changeStatus}
                             removeTodolist={removeTodolist}
+                            changeTaskTitle={changeTaskTitle}
+                            changeTodolistTitle={changeTodolistTitle}
                         />)
                 }
             )}
         </div>
     );
 }
+
 export default App;
