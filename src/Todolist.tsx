@@ -1,6 +1,6 @@
-import React, {useState, KeyboardEvent, ChangeEvent} from 'react';
-// import {Button} from './Button';
-import Button from '@mui/material/Button';
+import React, {ChangeEvent} from 'react';
+import {Button} from './Button';
+// import Button from '@mui/material/Button';
 import {FilterValuesType} from './App';
 import {AddItemForm} from './AddItemForm';
 import {EditableSpan} from './EditableSpan';
@@ -63,7 +63,7 @@ export const Todolist: React.FC<TodolistProps> = (props) => {
                         checked={t.isDone}
                         onChange={onChangeTaskStatus}/>
                     <EditableSpan oldTitle={t.title} callback={onChangeTaskTitle}/>
-                    {/*<Button callback={onClickRemoveTaskHandler} title={'x'}/>*/}
+                    <Button callback={onClickRemoveTaskHandler} title={'x'}/>
                 </li>)
             })}
         </ul>
@@ -77,32 +77,32 @@ export const Todolist: React.FC<TodolistProps> = (props) => {
         removeTodolist(todolistId);
     }
 
-    const onChangeTitleTodolist = (title: string) => {
+    const onChangeTodolistTitleHandler = (title: string) => {
         changeTodolistTitle(todolistId, title);
     }
 
     return (
         <div className="todoList">
             <h3>
-                <EditableSpan oldTitle={title} callback={onChangeTitleTodolist}/>
-                <Button onClick={removeTodolistHandler} variant="contained">x</Button>
-                {/*<Button title={'x'} callback={removeTodolistHandler}/>*/}
+                <EditableSpan oldTitle={title} callback={onChangeTodolistTitleHandler}/>
+                {/*<Button onClick={removeTodolistHandler} variant="contained">x</Button>*/}
+                <Button title={'x'} callback={removeTodolistHandler}/>
             </h3>
             <AddItemForm callback={addTaskHandler}/>
             {tasksList}
             <div>
-                {/*<Button className={filter === 'all' ? 'btn-active' : ''}*/}
-                {/*        callback={() => filteredTasks(todolistId, 'all')}*/}
-                {/*        title={'All'}*/}
-                {/*/>*/}
-                {/*<Button className={filter === 'active' ? 'btn-active' : ''}*/}
-                {/*        callback={() => filteredTasks(todolistId, 'active')}*/}
-                {/*        title={'Active'}*/}
-                {/*/>*/}
-                {/*<Button className={filter === 'completed' ? 'btn-active' : ''}*/}
-                {/*        callback={() => filteredTasks(todolistId, 'completed')}*/}
-                {/*        title={'Completed'}*/}
-                {/*/>*/}
+                <Button className={filter === 'all' ? 'btn-active' : ''}
+                        callback={() => filteredTasks(todolistId, 'all')}
+                        title={'All'}
+                />
+                <Button className={filter === 'active' ? 'btn-active' : ''}
+                        callback={() => filteredTasks(todolistId, 'active')}
+                        title={'Active'}
+                />
+                <Button className={filter === 'completed' ? 'btn-active' : ''}
+                        callback={() => filteredTasks(todolistId, 'completed')}
+                        title={'Completed'}
+                />
             </div>
         </div>
     )
