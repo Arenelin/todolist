@@ -1,6 +1,9 @@
 import React, {useState, KeyboardEvent, ChangeEvent} from 'react';
-import {Button} from './Button';
+// import {Button} from './Button';
+import Button from '@mui/material/Button';
 import {FilterValuesType} from './App';
+import {AddItemForm} from './AddItemForm';
+import {EditableSpan} from './EditableSpan';
 
 export type TaskType = {
     id: string
@@ -18,6 +21,8 @@ type TodolistProps = {
     addTask: (todolistId: string, titleValue: string) => void
     changeTaskStatus: (todolistId: string, taskId: string, newIsDoneValue: boolean) => void
     removeTodolist: (todolistId: string) => void
+    changeTaskTitle: (todolistId: string, taskId: string, title: string) => void
+    changeTodolistTitle: (todolistId: string, title: string) => void
 }
 
 export const Todolist: React.FC<TodolistProps> = (props) => {
@@ -30,10 +35,11 @@ export const Todolist: React.FC<TodolistProps> = (props) => {
         filteredTasks,
         addTask,
         changeTaskStatus,
-        removeTodolist
+        removeTodolist,
+        changeTaskTitle,
+        changeTodolistTitle
     } = props;
-    const [taskTitle, setTaskTitle] = useState('');
-    const [inputError, setInputError] = useState(false);
+
 
     const tasksForTodolist = filter === 'active'
         ? tasks.filter(t => !t.isDone)
@@ -46,70 +52,57 @@ export const Todolist: React.FC<TodolistProps> = (props) => {
             {tasksForTodolist.map(t => {
                 const onClickRemoveTaskHandler = () => removeTask(todolistId, t.id);
                 const onChangeTaskStatus = (e: ChangeEvent<HTMLInputElement>) => changeTaskStatus(todolistId, t.id, e.currentTarget.checked);
+
+                const onChangeTaskTitle = (title: string) => {
+                    changeTaskTitle(todolistId, t.id, title);
+                }
+
                 return (<li key={t.id} className={t.isDone ? 'task-is-done' : 'task'}>
                     <input
                         type="checkbox"
                         checked={t.isDone}
                         onChange={onChangeTaskStatus}/>
-                    <span>{t.title}</span>
-                    <Button callback={onClickRemoveTaskHandler} title={'x'}/>
+                    <EditableSpan oldTitle={t.title} callback={onChangeTaskTitle}/>
+                    {/*<Button callback={onClickRemoveTaskHandler} title={'x'}/>*/}
                 </li>)
             })}
         </ul>
         : <p>Tasks list is empty</p>
 
-    const addTaskOnKeyDownHandler = (e: KeyboardEvent<HTMLInputElement>) => {
-        if (e.key === 'Enter' && taskTitle) {
-            addTaskHandler();
-        }
-    }
-
-    const addTaskHandler = () => {
-        if (taskTitle.trim()) {
-            addTask(todolistId, taskTitle.trim());
-
-        } else {
-            setInputError(true);
-        }
-        setTaskTitle('');
-    };
-
-    const onChangeTaskTitle = (e: ChangeEvent<HTMLInputElement>) => {
-        setTaskTitle(e.currentTarget.value)
-        inputError && setInputError(false);
+    const addTaskHandler = (title: string) => {
+        addTask(todolistId, title);
     }
 
     const removeTodolistHandler = () => {
         removeTodolist(todolistId);
     }
 
+    const onChangeTitleTodolist = (title: string) => {
+        changeTodolistTitle(todolistId, title);
+    }
+
     return (
         <div className="todoList">
-            <h3>{title} <Button title={'x'} callback={removeTodolistHandler}/></h3>
-            <div>
-                <input value={taskTitle}
-                       onChange={onChangeTaskTitle}
-                       onKeyDown={addTaskOnKeyDownHandler}
-                       className={inputError ? 'input-error' : ''}
-                />
-
-                <Button callback={addTaskHandler} title={'+'} isDisabled={!taskTitle}/>
-            </div>
-            {inputError && <div className={'error'}>Error: title is required</div>}
+            <h3>
+                <EditableSpan oldTitle={title} callback={onChangeTitleTodolist}/>
+                <Button onClick={removeTodolistHandler} variant="contained">x</Button>
+                {/*<Button title={'x'} callback={removeTodolistHandler}/>*/}
+            </h3>
+            <AddItemForm callback={addTaskHandler}/>
             {tasksList}
             <div>
-                <Button className={filter === 'all' ? 'btn-active' : ''}
-                        callback={() => filteredTasks(todolistId, 'all')}
-                        title={'All'}
-                />
-                <Button className={filter === 'active' ? 'btn-active' : ''}
-                        callback={() => filteredTasks(todolistId, 'active')}
-                        title={'Active'}
-                />
-                <Button className={filter === 'completed' ? 'btn-active' : ''}
-                        callback={() => filteredTasks(todolistId, 'completed')}
-                        title={'Completed'}
-                />
+                {/*<Button className={filter === 'all' ? 'btn-active' : ''}*/}
+                {/*        callback={() => filteredTasks(todolistId, 'all')}*/}
+                {/*        title={'All'}*/}
+                {/*/>*/}
+                {/*<Button className={filter === 'active' ? 'btn-active' : ''}*/}
+                {/*        callback={() => filteredTasks(todolistId, 'active')}*/}
+                {/*        title={'Active'}*/}
+                {/*/>*/}
+                {/*<Button className={filter === 'completed' ? 'btn-active' : ''}*/}
+                {/*        callback={() => filteredTasks(todolistId, 'completed')}*/}
+                {/*        title={'Completed'}*/}
+                {/*/>*/}
             </div>
         </div>
     )
