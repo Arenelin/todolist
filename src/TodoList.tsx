@@ -1,6 +1,8 @@
 import React, {ChangeEvent, useState, KeyboardEvent} from 'react';
 import {Button} from './Button';
 import {FilterValuesType} from './App';
+import {AddItemForm} from './AddItemForm';
+import {EditableSpan} from './EditableSpan';
 
 export type TaskType = {
     id: string
@@ -18,6 +20,8 @@ type TodoListProps = {
     addTask: (todolistId: string, titleValue: string) => void
     changeTaskStatus: (todolistId: string, taskId: string, newIsDoneValue: boolean) => void
     removeTodolist: (todolistId: string) => void
+    changeTaskTitle: (todolistId: string, taskId: string, title: string) => void
+    changeTodolistTitle: (todolistId: string, title: string) => void
 }
 export const TodoList: React.FC<TodoListProps> = (props) => {
     const {
@@ -29,10 +33,11 @@ export const TodoList: React.FC<TodoListProps> = (props) => {
         filteredTasks,
         addTask,
         changeTaskStatus,
-        removeTodolist
+        removeTodolist,
+        changeTaskTitle,
+        changeTodolistTitle
     } = props;
-    const [title, setTitle] = useState('');
-    const [error, setError] = useState(false);
+
 
     //Фильтрация отображения тасок, в зависимости от значения фильтра
     const tasksForTodolist: TaskType[] = filter === 'active'
@@ -47,11 +52,18 @@ export const TodoList: React.FC<TodoListProps> = (props) => {
                 const onClickRemoveTaskHandler = () => removeTask(todolistId, t.id);
 
                 //Попытка изменения значения currentValue на противоположное приводит к вызову функции-обработчика
-                const onChangeTaskStatusHandler = (e: ChangeEvent<HTMLInputElement>) => changeTaskStatus(todolistId, t.id, e.currentTarget.checked);
+                const onChangeTaskStatusHandler = (e: ChangeEvent<HTMLInputElement>) => {
+                    changeTaskStatus(todolistId, t.id, e.currentTarget.checked);
+                }
+
+                const onChangeTaskTitleHandler = (title: string) => {
+                    changeTaskTitle(todolistId, t.id, title);
+                }
+
                 return (
                     <li key={t.id} className={t.isDone ? 'task-is-done' : ''}>
                         <input type="checkbox" checked={t.isDone} onChange={onChangeTaskStatusHandler}/>
-                        <span>{t.title}</span>
+                        <EditableSpan oldTitle={t.title} callback={onChangeTaskTitleHandler}/>
                         <Button title={'x'} callback={onClickRemoveTaskHandler}/>
                     </li>
                 )
@@ -59,24 +71,7 @@ export const TodoList: React.FC<TodoListProps> = (props) => {
         </ul>
         : <p>Tasks list is empty</p>
 
-    const onChangeTitleHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        setTitle(e.currentTarget.value);
-        error && setError(false);
-    }
-    const onKeyDownHandler = (e: KeyboardEvent<HTMLInputElement>) => {
-        if (e.key === 'Enter' && title) {
-            onClickAddTaskHandler()
-        }
-    }
-    const onClickAddTaskHandler = () => {
-        if (title.trim()) {
-            addTask(todolistId, title.trim());
-        } else {
-            setError(true);
-        }
-        setTitle('');
 
-    }
     const onClickFilterTasksHandler = (filterValue: FilterValuesType) => {
         filteredTasks(todolistId, filterValue);
     }
@@ -85,19 +80,22 @@ export const TodoList: React.FC<TodoListProps> = (props) => {
         removeTodolist(todolistId);
     }
 
+    const addTaskHandler = (title: string) => {
+        addTask(todolistId, title);
+    }
+
+    const onChangeTodolistTitleHandler = (title: string) => {
+        changeTodolistTitle(todolistId, title)
+    }
+
     return (
         <div className="todoList">
-            <h3>{titleForTodolist} <Button title={'x'} callback={removeTodolistHandler}/></h3>
-            <div>
-                <input
-                    value={title}
-                    onChange={onChangeTitleHandler}
-                    onKeyDown={onKeyDownHandler}
-                    className={error ? 'error-input' : ''}
-                />
-                <Button title={'+'} callback={onClickAddTaskHandler} isDisabled={!title}/>
-            </div>
-            {error && <div className="error">Error: title is required</div>}
+            <h3>
+                <EditableSpan oldTitle={titleForTodolist} callback={onChangeTodolistTitleHandler}/>
+                <Button title={'x'}
+                        callback={removeTodolistHandler}/>
+            </h3>
+            <AddItemForm callback={addTaskHandler}/>
             {listItems}
             <div>
                 <Button
