@@ -1,8 +1,12 @@
 import {FilterValues} from './App';
 import React, {ChangeEvent} from 'react';
-import {Button} from './Button';
 import {AddItemForm} from './components/AddItemForm';
 import {EditableSpan} from './components/EditableSpan';
+import IconButton from '@mui/material/IconButton';
+import DeleteIcon from '@mui/icons-material/Delete';
+import Button from '@mui/material/Button';
+import Checkbox from '@mui/material/Checkbox';
+import {pink} from '@mui/material/colors';
 
 export type TaskType = {
     id: string
@@ -69,11 +73,22 @@ export const TodoList: React.FC<TodoListProps> = (props) => {
             }
 
             return (
-                <li key={t.id} className={t.isDone ? 'is-done' : ''}>
-                    <input checked={t.isDone} type="checkbox" onChange={onChangeStatusTaskHandler}/>
+                <div key={t.id}>
+                    <Checkbox
+                        checked={t.isDone}
+                        onChange={onChangeStatusTaskHandler}
+                        sx={{
+                            color: pink[800],
+                            '&.Mui-checked': {
+                                color: pink[600],
+                            },
+                        }}/>
+
                     <EditableSpan title={t.title} onChangeTitle={onChangeTaskTitleHandler}/>
-                    <Button name={'x'} callback={onRemoveHandler}/>
-                </li>
+                    <IconButton onClick={onRemoveHandler} aria-label="delete">
+                        <DeleteIcon/>
+                    </IconButton>
+                </div>
             )
         }
     );
@@ -97,22 +112,24 @@ export const TodoList: React.FC<TodoListProps> = (props) => {
         <div>
             <h3>
                 <EditableSpan title={title} onChangeTitle={onChangeTodolistTitle}/>
-                <Button name={'x'} callback={onClickRemoveTodolist}/>
+                <IconButton onClick={onClickRemoveTodolist} aria-label="delete">
+                    <DeleteIcon/>
+                </IconButton>
             </h3>
             <AddItemForm callback={addTaskForCurrentTodolist}/>
             <ul>
                 {tasksList}
             </ul>
             <div>
-                <Button className={filter === 'all' ? 'active-filter' : ''}
-                        name={'All'}
-                        callback={() => changeFilterInTodolist('all')}/>
-                <Button className={filter === 'active' ? 'active-filter' : ''}
-                        name={'Active'}
-                        callback={() => changeFilterInTodolist('active')}/>
-                <Button className={filter === 'completed' ? 'active-filter' : ''}
-                        name={'Completed'}
-                        callback={() => changeFilterInTodolist('completed')}/>
+                <Button
+                    variant={filter === 'all' ? 'contained' : 'text'}
+                    onClick={() => changeFilterInTodolist('all')}>All</Button>
+                <Button variant={filter === 'active' ? 'contained' : 'text'}
+                        color={'primary'}
+                        onClick={() => changeFilterInTodolist('active')}>Active</Button>
+                <Button variant={filter === 'completed' ? 'contained' : 'text'}
+                        color={'secondary'}
+                        onClick={() => changeFilterInTodolist('completed')}>Completed</Button>
             </div>
         </div>
     )

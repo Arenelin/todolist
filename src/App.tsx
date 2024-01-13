@@ -3,6 +3,15 @@ import './App.css';
 import {TaskType, TodoList} from './TodoList';
 import {v1} from 'uuid';
 import {AddItemForm} from './components/AddItemForm';
+import AppBar from '@mui/material/AppBar/AppBar';
+import Typography from '@mui/material/Typography';
+import Toolbar from '@mui/material/Toolbar';
+import MenuIcon from '@mui/icons-material/Menu';
+import IconButton from '@mui/material/IconButton';
+import Button from '@mui/material/Button';
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
+import Paper from '@mui/material/Paper';
 
 export type FilterValues = 'all' | 'active' | 'completed';
 
@@ -93,25 +102,53 @@ function App() {
 
     return (
         <div className="App">
-            <AddItemForm callback={addNewTodolist}/>
-            {todolists.map(tl => {
-                    return (
-                        <TodoList
-                            key={tl.id}
-                            todolistId={tl.id}
-                            title={tl.title}
-                            tasks={tasksObj[tl.id]}
-                            filter={tl.filter}
-                            removeTask={removeTask}
-                            changeFilter={changeFilter}
-                            addTask={addTask}
-                            changeTaskStatus={changeStatus}
-                            removeTodolist={removeTodolist}
-                            changeTaskTitle={changeTaskTitle}
-                            changeTodolistTitle={changeTodolistTitle}
-                        />)
-                }
-            )}
+            <AppBar position="static">
+                <Toolbar>
+                    <IconButton
+                        size="large"
+                        edge="start"
+                        color="inherit"
+                        aria-label="menu"
+                        sx={{mr: 2}}
+                    >
+                        <MenuIcon/>
+                    </IconButton>
+                    <Typography variant="h6" component="div" sx={{flexGrow: 1}}>
+                        News
+                    </Typography>
+                    <Button color="inherit">Login</Button>
+                </Toolbar>
+            </AppBar>
+            <Container fixed>
+                <Grid container style={{padding: '10px'}}>
+                    <AddItemForm callback={addNewTodolist}/>
+                </Grid>
+                <Grid container spacing={3}>
+                    {todolists.map(tl => {
+                            return (
+                                <Grid item>
+                                    <Paper style={{padding: '10px'}}>
+                                        <TodoList
+                                            key={tl.id}
+                                            todolistId={tl.id}
+                                            title={tl.title}
+                                            tasks={tasksObj[tl.id]}
+                                            filter={tl.filter}
+                                            removeTask={removeTask}
+                                            changeFilter={changeFilter}
+                                            addTask={addTask}
+                                            changeTaskStatus={changeStatus}
+                                            removeTodolist={removeTodolist}
+                                            changeTaskTitle={changeTaskTitle}
+                                            changeTodolistTitle={changeTodolistTitle}
+                                        />
+                                    </Paper>
+                                </Grid>
+                            )
+                        }
+                    )}
+                </Grid>
+            </Container>
         </div>
     );
 }
