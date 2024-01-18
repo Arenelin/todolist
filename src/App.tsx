@@ -1,14 +1,29 @@
-import React, {useState} from 'react';
+import React, {useReducer} from 'react';
 import './App.css';
-import {TaskType, TodoList} from './TodoList';
+import {TaskType, TodoList} from './components/TodoList';
 import {v1} from 'uuid';
-import {AddItemForm} from './AddItemForm';
+import {AddItemForm} from './components/AddItemForm';
+import {
+    addTodolist,
+    changeTitleForTodolist,
+    deleteTodolist,
+    setNewFilterValue,
+    todolistsReducer
+} from './reducers/todolistsReducer';
+import {
+    addNewTask,
+    addTasksForNewTodolist, changeStatusForTask, changeTitleForTask,
+    deleteTask,
+    deleteTasksForRemovedTodolist,
+    tasksReducer
+} from './reducers/tasksReducer';
 
 export type FilterValuesType = 'all' | 'active' | 'completed';
-type TaskObjectType = {
+
+export type TaskObjectType = {
     [key: string]: TaskType[]
 }
-type TodolistType = {
+export type TodolistType = {
     id: string
     title: string
     filter: FilterValuesType
@@ -17,11 +32,8 @@ type TodolistType = {
 function App() {
     const todolistId_1 = v1();
     const todolistId_2 = v1();
-    const [todolists, setTodolists] = useState<TodolistType[]>([
-        {id: todolistId_1, title: 'What to learn', filter: 'all'},
-        {id: todolistId_2, title: 'What to buy', filter: 'all'}
-    ]);
-    const [tasks, setTasks] = useState<TaskObjectType>({
+
+    const [tasks, dispatchTasks] = useReducer(tasksReducer, {
         [todolistId_1]: [
             {id: v1(), title: 'HTML&CSS', isDone: true},
             {id: v1(), title: 'JavaScript', isDone: true},
@@ -34,42 +46,44 @@ function App() {
         ],
     })
 
+    const [todolists, dispatchTodolists] = useReducer(todolistsReducer, [
+        {id: todolistId_1, title: 'What to learn', filter: 'all'},
+        {id: todolistId_2, title: 'What to buy', filter: 'all'}
+    ])
+
     const addTask = (todolistId: string, titleValue: string) => {
-        setTasks({...tasks, [todolistId]: [...tasks[todolistId], {id: v1(), title: titleValue, isDone: false}]});
+        dispatchTasks(addNewTask(todolistId, titleValue));
     }
 
     const changeTaskStatus = (todolistId: string, taskId: string, newIsDoneValue: boolean) => {
-        setTasks({
-            ...tasks, [todolistId]: tasks[todolistId].map(t =>
-                t.id === taskId ? {...t, isDone: newIsDoneValue} : t)
-        });
+        dispatchTasks(changeStatusForTask(todolistId, taskId, newIsDoneValue));
     }
 
     const removeTask = (todolistId: string, taskId: string) => {
-        setTasks({...tasks, [todolistId]: tasks[todolistId].filter(t => t.id !== taskId)});
+        dispatchTasks(deleteTask(todolistId, taskId));
     }
 
     const filteredTasks = (todolistId: string, filterValue: FilterValuesType) => {
-        setTodolists(todolists.map(tl => tl.id === todolistId ? {...tl, filter: filterValue} : tl));
+        dispatchTodolists(setNewFilterValue(todolistId, filterValue));
     }
 
     const removeTodolist = (todolistId: string) => {
-        setTodolists(todolists.filter(tl => tl.id !== todolistId));
-        delete tasks[todolistId];
+        dispatchTodolists(deleteTodolist(todolistId));
+        dispatchTasks(deleteTasksForRemovedTodolist(todolistId));
     }
 
     const addNewTodolist = (title: string) => {
         const newTodolistId = v1();
-        setTodolists([...todolists, {id: newTodolistId, title, filter: 'all'}]);
-        setTasks({...tasks, [newTodolistId]: []});
+        dispatchTodolists(addTodolist(newTodolistId, title));
+        dispatchTasks(addTasksForNewTodolist(newTodolistId));
     }
 
     const changeTaskTitle = (todolistId: string, taskId: string, title: string) => {
-        setTasks({...tasks, [todolistId]: tasks[todolistId].map(t => t.id === taskId ? {...t, title} : t)});
+        dispatchTasks(changeTitleForTask(todolistId, taskId, title));
     }
 
     const changeTodolistTitle = (todolistId: string, title: string) => {
-        setTodolists(todolists.map(tl => tl.id === todolistId ? {...tl, title} : tl));
+        dispatchTodolists(changeTitleForTodolist(todolistId, title));
     }
 
     return (

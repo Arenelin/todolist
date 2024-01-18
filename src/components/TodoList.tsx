@@ -1,8 +1,8 @@
-import React, {ChangeEvent, useState, KeyboardEvent} from 'react';
-import {Button} from './Button';
-import {FilterValuesType} from './App';
-import {AddItemForm} from './AddItemForm';
+import React, {ChangeEvent} from 'react';
+import {Button} from '../Button';
+import {FilterValuesType} from '../App';
 import {EditableSpan} from './EditableSpan';
+import {AddItemForm} from './AddItemForm';
 
 export type TaskType = {
     id: string
