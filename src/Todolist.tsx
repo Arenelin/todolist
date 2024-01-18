@@ -17,7 +17,7 @@ type TodolistProps = {
     tasks: TaskType[]
     filter: FilterValuesType
     removeTask: (todolistId: string, taskId: string) => void
-    filteredTasks: (todolistId: string, valueFilter: FilterValuesType) => void
+    changeFilterTodolistForFilteredTasks: (todolistId: string, valueFilter: FilterValuesType) => void
     addTask: (todolistId: string, titleValue: string) => void
     changeTaskStatus: (todolistId: string, taskId: string, newIsDoneValue: boolean) => void
     removeTodolist: (todolistId: string) => void
@@ -32,7 +32,7 @@ export const Todolist: React.FC<TodolistProps> = (props) => {
         tasks,
         filter,
         removeTask,
-        filteredTasks,
+        changeFilterTodolistForFilteredTasks,
         addTask,
         changeTaskStatus,
         removeTodolist,
@@ -92,15 +92,15 @@ export const Todolist: React.FC<TodolistProps> = (props) => {
             {tasksList}
             <div>
                 <Button className={filter === 'all' ? 'btn-active' : ''}
-                        callback={() => filteredTasks(todolistId, 'all')}
+                        callback={() => changeFilterTodolistForFilteredTasks(todolistId, 'all')}
                         title={'All'}
                 />
                 <Button className={filter === 'active' ? 'btn-active' : ''}
-                        callback={() => filteredTasks(todolistId, 'active')}
+                        callback={() => changeFilterTodolistForFilteredTasks(todolistId, 'active')}
                         title={'Active'}
                 />
                 <Button className={filter === 'completed' ? 'btn-active' : ''}
-                        callback={() => filteredTasks(todolistId, 'completed')}
+                        callback={() => changeFilterTodolistForFilteredTasks(todolistId, 'completed')}
                         title={'Completed'}
                 />
             </div>
