@@ -2,11 +2,7 @@ import {FilterValues} from './App';
 import React, {ChangeEvent} from 'react';
 import {AddItemForm} from './components/AddItemForm';
 import {EditableSpan} from './components/EditableSpan';
-import IconButton from '@mui/material/IconButton';
-import DeleteIcon from '@mui/icons-material/Delete';
-import Button from '@mui/material/Button';
-import Checkbox from '@mui/material/Checkbox';
-import {pink} from '@mui/material/colors';
+import {Button} from './Button';
 
 export type TaskType = {
     id: string
@@ -74,20 +70,9 @@ export const TodoList: React.FC<TodoListProps> = (props) => {
 
             return (
                 <div key={t.id}>
-                    <Checkbox
-                        checked={t.isDone}
-                        onChange={onChangeStatusTaskHandler}
-                        sx={{
-                            color: pink[800],
-                            '&.Mui-checked': {
-                                color: pink[600],
-                            },
-                        }}/>
-
+                    <input type="checkbox" checked={t.isDone} onChange={onChangeStatusTaskHandler}/>
                     <EditableSpan title={t.title} onChangeTitle={onChangeTaskTitleHandler}/>
-                    <IconButton onClick={onRemoveHandler} aria-label="delete">
-                        <DeleteIcon/>
-                    </IconButton>
+                    <Button name={'x'} callback={onRemoveHandler}/>
                 </div>
             )
         }
@@ -112,9 +97,8 @@ export const TodoList: React.FC<TodoListProps> = (props) => {
         <div>
             <h3>
                 <EditableSpan title={title} onChangeTitle={onChangeTodolistTitle}/>
-                <IconButton onClick={onClickRemoveTodolist} aria-label="delete">
-                    <DeleteIcon/>
-                </IconButton>
+                <Button name={'x'}
+                        callback={onClickRemoveTodolist}/>
             </h3>
             <AddItemForm callback={addTaskForCurrentTodolist}/>
             <ul>
@@ -122,14 +106,20 @@ export const TodoList: React.FC<TodoListProps> = (props) => {
             </ul>
             <div>
                 <Button
-                    variant={filter === 'all' ? 'contained' : 'text'}
-                    onClick={() => changeFilterInTodolist('all')}>All</Button>
-                <Button variant={filter === 'active' ? 'contained' : 'text'}
-                        color={'primary'}
-                        onClick={() => changeFilterInTodolist('active')}>Active</Button>
-                <Button variant={filter === 'completed' ? 'contained' : 'text'}
-                        color={'secondary'}
-                        onClick={() => changeFilterInTodolist('completed')}>Completed</Button>
+                    className={filter === 'all' ? 'btn-active' : ''}
+                    name={'All'}
+                    callback={() => changeFilterInTodolist('all')}
+                />
+                <Button
+                    className={filter === 'active' ? 'btn-active' : ''}
+                    name={'Active'}
+                    callback={() => changeFilterInTodolist('active')}
+                />
+                <Button
+                    className={filter === 'completed' ? 'btn-active' : ''}
+                    name={'Completed'}
+                    callback={() => changeFilterInTodolist('completed')}
+                />
             </div>
         </div>
     )
