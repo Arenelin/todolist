@@ -1,8 +1,12 @@
-import {FilterValues} from './App';
+import {FilterValues} from './components/App';
 import React, {ChangeEvent} from 'react';
 import {AddItemForm} from './components/AddItemForm';
 import {EditableSpan} from './components/EditableSpan';
 import {Button} from './Button';
+import {useDispatch, useSelector} from 'react-redux';
+import {AppRootState} from './state/store';
+import {TasksState} from './AppWithRedux';
+import {addNewTask, changeTaskStatus, changeTitleForTask, deleteTask} from './state/tasks-reducer';
 
 export type TaskType = {
     id: string
@@ -25,6 +29,29 @@ type TodoListProps = {
 }
 
 export const TodoList: React.FC<TodoListProps> = (props) => {
+
+    const dispatch = useDispatch();
+    const tasksObj =
+        useSelector<AppRootState, TaskType[]>(state => state.tasks[props.todolistId])
+    //Достали массив тасок для конкретного тудулиста
+
+
+    function addTask(title: string, todolistId: string) {
+        dispatch(addNewTask(todolistId, title))
+    }
+
+    const changeStatus = (taskId: string, newTaskStatus: boolean, todolistId: string) => {
+        dispatch(changeTaskStatus(todolistId, taskId, newTaskStatus))
+    }
+
+    function removeTask(id: string, todolistId: string) {
+        dispatch(deleteTask(todolistId, id))
+    }
+
+    const changeTaskTitle = (title: string, todolistId: string, taskId: string) => {
+        dispatch(changeTitleForTask(todolistId, taskId, title))
+    }
+
     const {
         todolistId,
         title,
