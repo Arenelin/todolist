@@ -1,8 +1,11 @@
 import React, {ChangeEvent} from 'react';
-import {Button} from '../Button';
+import {Button} from './Button';
 import {FilterValuesType} from '../App';
 import {EditableSpan} from './EditableSpan';
 import {AddItemForm} from './AddItemForm';
+import {useDispatch, useSelector} from 'react-redux';
+import {AppRootType} from '../store/store';
+import {addNewTask, changeStatusForTask, changeTitleForTask, deleteTask} from '../reducers/tasks-reducer';
 
 export type TaskType = {
     id: string
@@ -13,31 +16,24 @@ export type TaskType = {
 type TodoListProps = {
     todolistId: string
     titleForTodolist: string
-    tasks: TaskType[]
     filter: FilterValuesType
-    removeTask: (todolistId: string, taskId: string) => void
     filteredTasks: (todolistId: string, filterValue: FilterValuesType) => void
-    addTask: (todolistId: string, titleValue: string) => void
-    changeTaskStatus: (todolistId: string, taskId: string, newIsDoneValue: boolean) => void
     removeTodolist: (todolistId: string) => void
-    changeTaskTitle: (todolistId: string, taskId: string, title: string) => void
     changeTodolistTitle: (todolistId: string, title: string) => void
 }
 export const TodoList: React.FC<TodoListProps> = (props) => {
     const {
         todolistId,
         titleForTodolist,
-        tasks,
         filter,
-        removeTask,
         filteredTasks,
-        addTask,
-        changeTaskStatus,
         removeTodolist,
-        changeTaskTitle,
         changeTodolistTitle
     } = props;
 
+    const dispatch = useDispatch();
+    const tasks =
+        useSelector<AppRootType, TaskType[]>(state => state.tasks[todolistId])
 
     //Фильтрация отображения тасок, в зависимости от значения фильтра
     const tasksForTodolist: TaskType[] = filter === 'active'
@@ -49,15 +45,15 @@ export const TodoList: React.FC<TodoListProps> = (props) => {
     const listItems: JSX.Element = tasksForTodolist.length
         ? <ul>
             {tasksForTodolist.map(t => {
-                const onClickRemoveTaskHandler = () => removeTask(todolistId, t.id);
+                const onClickRemoveTaskHandler = () => dispatch(deleteTask(todolistId, t.id));
 
                 //Попытка изменения значения currentValue на противоположное приводит к вызову функции-обработчика
                 const onChangeTaskStatusHandler = (e: ChangeEvent<HTMLInputElement>) => {
-                    changeTaskStatus(todolistId, t.id, e.currentTarget.checked);
+                    dispatch(changeStatusForTask(todolistId, t.id, e.currentTarget.checked))
                 }
 
                 const onChangeTaskTitleHandler = (title: string) => {
-                    changeTaskTitle(todolistId, t.id, title);
+                    dispatch(changeTitleForTask(todolistId, t.id, title))
                 }
 
                 return (
@@ -81,7 +77,7 @@ export const TodoList: React.FC<TodoListProps> = (props) => {
     }
 
     const addTaskHandler = (title: string) => {
-        addTask(todolistId, title);
+        dispatch(addNewTask(todolistId, title))
     }
 
     const onChangeTodolistTitleHandler = (title: string) => {
