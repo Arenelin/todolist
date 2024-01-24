@@ -1,7 +1,21 @@
 import {TaskObjType} from '../App';
 import {v1} from 'uuid';
+import {todolist_1, todolist_2} from './todolists-reducer';
 
-export const tasksReducer = (state: TaskObjType, action: TasksReducer): TaskObjType => {
+const initialState: TaskObjType = {
+    [todolist_1]: [
+        {id: v1(), title: 'CSS', isDone: true},
+        {id: v1(), title: 'JS', isDone: true},
+        {id: v1(), title: 'React', isDone: false},
+        {id: v1(), title: 'Redux', isDone: false},
+    ],
+    [todolist_2]: [
+        {id: v1(), title: 'Book', isDone: false},
+        {id: v1(), title: 'Milk', isDone: true},
+    ],
+}
+
+export const tasksReducer = (state: TaskObjType = initialState, action: TasksReducer): TaskObjType => {
     switch (action.type) {
         case 'REMOVE-TASK':
             return {
@@ -28,9 +42,9 @@ export const tasksReducer = (state: TaskObjType, action: TasksReducer): TaskObjT
                 [action.payload.todolistId]: state[action.payload.todolistId]
                     .map(t => t.id === action.payload.id ? {...t, title: action.payload.title} : t)
             }
-        case 'ADD-TASKS-FOR-NEW-TODOLIST':
+        case 'ADD-TODOLIST':
             return {...state, [action.payload.todolistId]: []}
-        case 'REMOVE-TASKS-OF-DELETED-TODOLIST':
+        case 'REMOVE-TODOLIST':
             const stateCopy = {...state}
             delete stateCopy[action.payload.todolistId]
             return stateCopy
@@ -56,7 +70,7 @@ type AddTasksForNewTodolist = ReturnType<typeof addTasksForNewTodolist>
 
 export const deleteTasksOfDeletedTodolist = (todolistId: string) => {
     return {
-        type: 'REMOVE-TASKS-OF-DELETED-TODOLIST',
+        type: 'REMOVE-TODOLIST',
         payload: {todolistId}
     } as const
 }
@@ -96,7 +110,7 @@ export const changeTitle = (todolistId: string, id: string, title: string) => {
 }
 export const addTasksForNewTodolist = (todolistId: string) => {
     return {
-        type: 'ADD-TASKS-FOR-NEW-TODOLIST',
+        type: 'ADD-TODOLIST',
         payload: {todolistId}
     } as const
 }

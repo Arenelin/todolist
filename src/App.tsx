@@ -1,24 +1,10 @@
-import React, {useReducer} from 'react';
+import React from 'react';
 import './App.css';
-import {TaskType, Todolist} from './Todolist';
-import {v1} from 'uuid';
-import {AddItemForm} from './AddItemForm';
-import {
-    addTodolist,
-    changeTitleForTodolist,
-    changeTodolistFilter,
-    deleteTodolist,
-    todolistsReducer
-} from './reducers/todolists-reducer';
-import {
-    addNewTask,
-    addTasksForNewTodolist,
-    changeStatusTask,
-    changeTitle,
-    deleteTask,
-    deleteTasksOfDeletedTodolist,
-    tasksReducer
-} from './reducers/tasks-reducer';
+import {TaskType, Todolist} from './components/Todolist';
+import {AddItemForm} from './components/AddItemForm';
+import {addTodolist, changeTitleForTodolist, changeTodolistFilter, deleteTodolist} from './reducers/todolists-reducer';
+import {useDispatch, useSelector} from 'react-redux';
+import {AppRootState} from './store/store';
 
 export type FilterValuesType = 'all' | 'active' | 'completed';
 
@@ -33,64 +19,25 @@ export type TaskObjType = {
 }
 
 function App() {
-
-    const todolistID1 = v1();
-    const todolistID2 = v1();
-
-    const [tasks, dispatchTasks] = useReducer(tasksReducer, {
-        [todolistID1]: [
-            {id: v1(), title: 'HTML&CSS', isDone: true},
-            {id: v1(), title: 'JS', isDone: true},
-            {id: v1(), title: 'ReactJS', isDone: false},
-            {id: v1(), title: 'Rest API', isDone: false},
-            {id: v1(), title: 'GraphQL', isDone: false},
-        ],
-        [todolistID2]: [
-            {id: v1(), title: 'HTML&CSS2', isDone: true},
-            {id: v1(), title: 'JS2', isDone: true},
-            {id: v1(), title: 'ReactJS2', isDone: false},
-            {id: v1(), title: 'Rest API2', isDone: false},
-            {id: v1(), title: 'GraphQL2', isDone: false},
-        ]
-    });
-    const [todolists, dispatchTodolists] = useReducer(todolistsReducer, [
-        {id: todolistID1, title: 'What to learn', filter: 'all'},
-        {id: todolistID2, title: 'What to buy', filter: 'all'},
-    ]);
-
-    const addTask = (todolistId: string, title: string) => {
-        dispatchTasks(addNewTask(todolistId, title))
-    }
-
-    const changeTaskStatus = (todolistId: string, taskId: string, newIsDoneValue: boolean) => {
-        dispatchTasks(changeStatusTask(todolistId, taskId, newIsDoneValue))
-    }
-
-    const removeTask = (todolistId: string, taskId: string) => {
-        dispatchTasks(deleteTask(todolistId, taskId))
-    }
+    const dispatch = useDispatch();
+    const todolists =
+        useSelector<AppRootState, todolistsType[]>(state => state.todolists)
 
     const changeFilterTodolistForFilteredTasks = (todolistId: string, valueFilter: FilterValuesType) => {
-        dispatchTodolists(changeTodolistFilter(todolistId, valueFilter))
+        dispatch(changeTodolistFilter(todolistId, valueFilter))
     }
 
     const removeTodolist = (todolistId: string) => {
-        dispatchTodolists(deleteTodolist(todolistId))
-        dispatchTasks(deleteTasksOfDeletedTodolist(todolistId))
+        dispatch(deleteTodolist(todolistId))
     }
 
     const addNewTodolist = (title: string) => {
-        const newTodolistID = v1();
-        dispatchTodolists(addTodolist(newTodolistID, title))
-        dispatchTasks(addTasksForNewTodolist(newTodolistID))
-    }
-
-    const changeTaskTitle = (todolistId: string, taskId: string, title: string) => {
-        dispatchTasks(changeTitle(todolistId, taskId, title))
+        const action = addTodolist(title)
+        dispatch(action)
     }
 
     const changeTodolistTitle = (todolistId: string, title: string) => {
-        dispatchTodolists(changeTitleForTodolist(todolistId, title))
+        dispatch(changeTitleForTodolist(todolistId, title))
     }
 
     return (
@@ -102,14 +49,9 @@ function App() {
                         key={tl.id}
                         todolistId={tl.id}
                         title={tl.title}
-                        tasks={tasks[tl.id]}
                         filter={tl.filter}
-                        removeTask={removeTask}
                         changeFilterTodolistForFilteredTasks={changeFilterTodolistForFilteredTasks}
-                        addTask={addTask}
-                        changeTaskStatus={changeTaskStatus}
                         removeTodolist={removeTodolist}
-                        changeTaskTitle={changeTaskTitle}
                         changeTodolistTitle={changeTodolistTitle}
                     />)
 
