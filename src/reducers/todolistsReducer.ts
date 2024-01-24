@@ -15,11 +15,10 @@ export const todolistsReducer = (state: todolistsType[], action: TodolistsReduce
                 ? {...tl, title: action.payload.title}
                 : tl)
         default:
-            throw new Error('I don\'t work')
+            return state;
     }
 
 }
-
 
 type TodolistsReducer = RemoveTodolist | ChangeTodolistFilter | AddTodolist | ChangeTitleForTodolist
 

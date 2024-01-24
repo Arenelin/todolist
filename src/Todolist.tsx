@@ -4,6 +4,7 @@ import {Button} from './Button';
 import {FilterValuesType} from './App';
 import {AddItemForm} from './AddItemForm';
 import {EditableSpan} from './EditableSpan';
+import {UniversalCheckbox} from './components/UniversalCheckbox';
 
 export type TaskType = {
     id: string
@@ -47,21 +48,24 @@ export const Todolist: React.FC<TodolistProps> = (props) => {
             ? tasks.filter(t => t.isDone)
             : tasks
 
+    const onChangeTaskStatus = (taskId: string, newValue: boolean) => {
+        changeTaskStatus(todolistId, taskId, newValue);
+    }
+
     const tasksList: JSX.Element = tasksForTodolist.length
         ? <ul>
             {tasksForTodolist.map(t => {
                 const onClickRemoveTaskHandler = () => removeTask(todolistId, t.id);
-                const onChangeTaskStatus = (e: ChangeEvent<HTMLInputElement>) => changeTaskStatus(todolistId, t.id, e.currentTarget.checked);
+
 
                 const onChangeTaskTitle = (title: string) => {
                     changeTaskTitle(todolistId, t.id, title);
                 }
-
+                const onChangeTaskStatusHandler = (newValue: boolean) => {
+                    onChangeTaskStatus(t.id, newValue)
+                }
                 return (<li key={t.id} className={t.isDone ? 'task-is-done' : 'task'}>
-                    <input
-                        type="checkbox"
-                        checked={t.isDone}
-                        onChange={onChangeTaskStatus}/>
+                    <UniversalCheckbox checked={t.isDone} onChange={onChangeTaskStatusHandler}/>
                     <EditableSpan oldTitle={t.title} callback={onChangeTaskTitle}/>
                     <Button callback={onClickRemoveTaskHandler} title={'x'}/>
                 </li>)
