@@ -1,6 +1,6 @@
-import {TasksState} from '../components/App';
 import {v1} from 'uuid';
 import {AddTodolistActionType, RemoveTodoListActionType, todolist_1, todolist_2} from './todolists-reducer';
+import {TasksState} from '../AppWithRedux';
 
 
 const initialState: TasksState = {

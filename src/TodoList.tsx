@@ -1,12 +1,11 @@
-import {FilterValues} from './components/App';
 import React, {ChangeEvent} from 'react';
 import {AddItemForm} from './components/AddItemForm';
 import {EditableSpan} from './components/EditableSpan';
 import {Button} from './Button';
 import {useDispatch, useSelector} from 'react-redux';
 import {AppRootState} from './state/store';
-import {TasksState} from './AppWithRedux';
 import {addNewTask, changeTaskStatus, changeTitleForTask, deleteTask} from './state/tasks-reducer';
+import {FilterValues} from './AppWithRedux';
 
 export type TaskType = {
     id: string
@@ -17,56 +16,28 @@ export type TaskType = {
 type TodoListProps = {
     todolistId: string
     title: string
-    tasks: TaskType[]
     filter: FilterValues
-    removeTask: (id: string, todolistId: string) => void
     changeFilter: (value: FilterValues, todolistId: string) => void
-    addTask: (title: string, todolistId: string) => void
-    changeTaskStatus: (taskId: string, newTaskStatus: boolean, todolistId: string) => void
     removeTodolist: (todolistId: string) => void
-    changeTaskTitle: (title: string, todolistId: string, taskId: string) => void
     changeTodolistTitle: (title: string, todolistId: string) => void
 }
 
 export const TodoList: React.FC<TodoListProps> = (props) => {
-
-    const dispatch = useDispatch();
-    const tasksObj =
-        useSelector<AppRootState, TaskType[]>(state => state.tasks[props.todolistId])
-    //Достали массив тасок для конкретного тудулиста
-
-
-    function addTask(title: string, todolistId: string) {
-        dispatch(addNewTask(todolistId, title))
-    }
-
-    const changeStatus = (taskId: string, newTaskStatus: boolean, todolistId: string) => {
-        dispatch(changeTaskStatus(todolistId, taskId, newTaskStatus))
-    }
-
-    function removeTask(id: string, todolistId: string) {
-        dispatch(deleteTask(todolistId, id))
-    }
-
-    const changeTaskTitle = (title: string, todolistId: string, taskId: string) => {
-        dispatch(changeTitleForTask(todolistId, taskId, title))
-    }
-
     const {
         todolistId,
         title,
-        tasks,
         filter,
-        removeTask,
         changeFilter,
-        addTask,
-        changeTaskStatus,
         removeTodolist,
-        changeTaskTitle,
         changeTodolistTitle
     } = props;
 
-    //Фильтрация отображения тасок, в зависимости от свойства filter в конкретном тудулисте
+    const dispatch = useDispatch();
+
+    //Достали массив тасок для конкретного тудулиста
+    const tasks =
+        useSelector<AppRootState, TaskType[]>(state => state.tasks[todolistId])
+
     let tasksForTodoList = filter === 'active'
         ? tasks.filter(t => !t.isDone)
         : filter === 'completed'
@@ -79,20 +50,19 @@ export const TodoList: React.FC<TodoListProps> = (props) => {
     }
 
     const tasksList: JSX.Element[] = tasksForTodoList.map(t => {
-
-            //Удалить задачу из списка
+            //Удаление таски
             const onRemoveHandler = () => {
-                removeTask(t.id, todolistId);
+                dispatch(deleteTask(todolistId, t.id))
             }
 
-            //Изменить название задачи
+            //Смена заголовка таски
             const onChangeTaskTitleHandler = (title: string) => {
-                changeTaskTitle(title, todolistId, t.id);
+                dispatch(changeTitleForTask(todolistId, t.id, title))
             }
 
-            //Изменить статус задачи на противоположный
+            //Смена статуса таски
             const onChangeStatusTaskHandler = (e: ChangeEvent<HTMLInputElement>) => {
-                changeTaskStatus(t.id, e.currentTarget.checked, todolistId);
+                dispatch(changeTaskStatus(todolistId, t.id, e.currentTarget.checked))
             }
 
             return (
@@ -105,9 +75,9 @@ export const TodoList: React.FC<TodoListProps> = (props) => {
         }
     );
 
-    //Добавление задачи в конкретный тудулист
+    //Добавление таски
     const addTaskForCurrentTodolist = (title: string) => {
-        addTask(title, todolistId);
+        dispatch(addNewTask(todolistId, title))
     }
 
     //Удаление конкретного тудулиста

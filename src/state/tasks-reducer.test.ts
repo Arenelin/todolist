@@ -1,7 +1,7 @@
 import {v1} from 'uuid';
-import {TasksState} from '../components/App';
 import {addNewTask, changeTaskStatus, changeTitleForTask, deleteTask, tasksReducer} from './tasks-reducer';
 import {addTodolist, deleteTodolist} from './todolists-reducer';
+import {TasksState} from '../AppWithRedux';
 
 
 test('correct task should be removed', () => {

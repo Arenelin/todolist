@@ -1,16 +1,8 @@
-import React, {useReducer} from 'react';
+import React from 'react';
 import './App.css';
 import {TaskType, TodoList} from './TodoList';
-import {v1} from 'uuid';
 import {AddItemForm} from './components/AddItemForm';
-import {
-    addTodolist,
-    changeTodolistFilter,
-    changeTodolistName,
-    deleteTodolist,
-    todolistsReducer
-} from './state/todolists-reducer';
-import {addNewTask, changeTaskStatus, changeTitleForTask, deleteTask, tasksReducer} from './state/tasks-reducer';
+import {addTodolist, changeTodolistFilter, changeTodolistName, deleteTodolist} from './state/todolists-reducer';
 import {useDispatch, useSelector} from 'react-redux';
 import {AppRootState} from './state/store';
 
@@ -45,8 +37,6 @@ function AppWithRedux() {
         dispatch(action)
     }
 
-
-
     const changeTodolistTitle = (newTodolistTitle: string, todolistId: string,) => {
         dispatch(changeTodolistName(todolistId, newTodolistTitle))
     }
@@ -60,14 +50,9 @@ function AppWithRedux() {
                             key={tl.id}
                             todolistId={tl.id}
                             title={tl.title}
-                            tasks={tasksObj[tl.id]}
                             filter={tl.filter}
-                            removeTask={removeTask}
                             changeFilter={changeFilter}
-                            addTask={addTask}
-                            changeTaskStatus={changeStatus}
                             removeTodolist={removeTodolist}
-                            changeTaskTitle={changeTaskTitle}
                             changeTodolistTitle={changeTodolistTitle}
                         />
                     )
