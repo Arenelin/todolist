@@ -27,7 +27,7 @@ test('correct todolist should be added', () => {
 
     let newTodolistTitle = 'New Todolist'
 
-    const startState: Array<TodolistType> = [
+    const startState: TodolistType[] = [
         {id: todolistId1, title: 'What to learn', filter: 'all'},
         {id: todolistId2, title: 'What to buy', filter: 'all'}
     ]
@@ -45,16 +45,10 @@ test('correct todolist should change its name', () => {
 
     let newTodolistTitle = 'New Todolist'
 
-    const startState: Array<TodolistType> = [
+    const startState: TodolistType[] = [
         {id: todolistId1, title: 'What to learn', filter: 'all'},
         {id: todolistId2, title: 'What to buy', filter: 'all'}
     ]
-
-    // const action:ChangeTodolistTitleActionType = { //Если не протипизировать, то TS воспримет type просто как строку, а не как константное значение, указанное в типе редьюсера
-    //     type: 'CHANGE-TODOLIST-TITLE',
-    //     id: todolistId2,
-    //     title: newTodolistTitle
-    // }
 
     const endState = todolistsReducer(startState, changeTodolistName(todolistId2, newTodolistTitle))
 
@@ -69,16 +63,10 @@ test('correct filter of todolist should be changed', () => {
 
     let newFilter: FilterValues = 'completed'
 
-    const startState: Array<TodolistType> = [
+    const startState: TodolistType[] = [
         {id: todolistId1, title: 'What to learn', filter: 'all'},
         {id: todolistId2, title: 'What to buy', filter: 'all'}
     ]
-
-    // const action:ChangeTodolistFilterActionType = {
-    //     type: 'CHANGE-TODOLIST-FILTER',
-    //     id: todolistId2,
-    //     filter: newFilter
-    // }
 
     const endState = todolistsReducer(startState, changeTodolistFilter(todolistId2, newFilter))
 
