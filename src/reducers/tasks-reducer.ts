@@ -1,6 +1,6 @@
 import {TaskObjType} from '../App';
 import {v1} from 'uuid';
-import {todolist_1, todolist_2} from './todolists-reducer';
+import {AddTodolist, RemoveTodolist, todolist_1, todolist_2} from './todolists-reducer';
 
 const initialState: TaskObjType = {
     [todolist_1]: [
@@ -54,26 +54,17 @@ export const tasksReducer = (state: TaskObjType = initialState, action: TasksRed
 }
 
 type TasksReducer =
-    DeleteTasksOfDeletedTodolist
+    RemoveTodolist
     | RemoveTask
     | AddNewTask
     | ChangeStatusTask
     | ChangeTitle
-    | AddTasksForNewTodolist
+    | AddTodolist
 
-type DeleteTasksOfDeletedTodolist = ReturnType<typeof deleteTasksOfDeletedTodolist>
 type RemoveTask = ReturnType<typeof deleteTask>
 type AddNewTask = ReturnType<typeof addNewTask>
 type ChangeStatusTask = ReturnType<typeof changeStatusTask>
 type ChangeTitle = ReturnType<typeof changeTitle>
-type AddTasksForNewTodolist = ReturnType<typeof addTasksForNewTodolist>
-
-export const deleteTasksOfDeletedTodolist = (todolistId: string) => {
-    return {
-        type: 'REMOVE-TODOLIST',
-        payload: {todolistId}
-    } as const
-}
 
 export const deleteTask = (todolistId: string, id: string) => {
     return {
@@ -106,11 +97,5 @@ export const changeTitle = (todolistId: string, id: string, title: string) => {
             id,
             title
         }
-    } as const
-}
-export const addTasksForNewTodolist = (todolistId: string) => {
-    return {
-        type: 'ADD-TODOLIST',
-        payload: {todolistId}
     } as const
 }

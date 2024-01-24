@@ -30,10 +30,10 @@ export const todolistsReducer = (state: todolistsType[] = initialState, action: 
 
 type TodolistsReducer = RemoveTodolist | ChangeTodolistFilter | AddTodolist | ChangeTitleForTodolist
 
-type RemoveTodolist = ReturnType<typeof deleteTodolist>
-type ChangeTodolistFilter = ReturnType<typeof changeTodolistFilter>
-type AddTodolist = ReturnType<typeof addTodolist>
-type ChangeTitleForTodolist = ReturnType<typeof changeTitleForTodolist>
+export type RemoveTodolist = ReturnType<typeof deleteTodolist>
+export type ChangeTodolistFilter = ReturnType<typeof changeTodolistFilter>
+export type AddTodolist = ReturnType<typeof addTodolist>
+export type ChangeTitleForTodolist = ReturnType<typeof changeTitleForTodolist>
 
 export const deleteTodolist = (todolistId: string) => {
     return {
