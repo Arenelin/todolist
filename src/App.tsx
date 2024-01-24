@@ -9,7 +9,7 @@ import {
     changeTodolistFilter,
     deleteTodolist,
     todolistsReducer
-} from './reducers/todolistsReducer';
+} from './reducers/todolists-reducer';
 import {
     addNewTask,
     addTasksForNewTodolist,
@@ -18,7 +18,7 @@ import {
     deleteTask,
     deleteTasksOfDeletedTodolist,
     tasksReducer
-} from './reducers/tasksReducer';
+} from './reducers/tasks-reducer';
 
 export type FilterValuesType = 'all' | 'active' | 'completed';
 

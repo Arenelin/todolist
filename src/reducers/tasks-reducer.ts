@@ -3,9 +3,6 @@ import {v1} from 'uuid';
 
 export const tasksReducer = (state: TaskObjType, action: TasksReducer): TaskObjType => {
     switch (action.type) {
-        case 'REMOVE-TASKS-OF-DELETED-TODOLIST':
-            delete state[action.payload.todolistId]
-            return state
         case 'REMOVE-TASK':
             return {
                 ...state,
@@ -17,7 +14,8 @@ export const tasksReducer = (state: TaskObjType, action: TasksReducer): TaskObjT
                 ...state,
                 [action.payload.todolistId]: [...state[action.payload.todolistId],
                     {id: v1(), title: action.payload.title, isDone: false}
-                ]}
+                ]
+            }
         case 'CHANGE-TASK-STATUS':
             return {
                 ...state,
@@ -32,8 +30,12 @@ export const tasksReducer = (state: TaskObjType, action: TasksReducer): TaskObjT
             }
         case 'ADD-TASKS-FOR-NEW-TODOLIST':
             return {...state, [action.payload.todolistId]: []}
+        case 'REMOVE-TASKS-OF-DELETED-TODOLIST':
+            const stateCopy = {...state}
+            delete stateCopy[action.payload.todolistId]
+            return stateCopy
         default:
-            throw new Error('I don\'t work')
+            return state
     }
 }
 
@@ -52,7 +54,6 @@ type ChangeStatusTask = ReturnType<typeof changeStatusTask>
 type ChangeTitle = ReturnType<typeof changeTitle>
 type AddTasksForNewTodolist = ReturnType<typeof addTasksForNewTodolist>
 
-//AC
 export const deleteTasksOfDeletedTodolist = (todolistId: string) => {
     return {
         type: 'REMOVE-TASKS-OF-DELETED-TODOLIST',
