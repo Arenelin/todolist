@@ -1,12 +1,16 @@
-type ButtonPropsType = {
+import React, {memo} from 'react';
+
+type ButtonProps = {
     name: string
     callback: () => void
     className?: string
 }
 
-export function Button(props: ButtonPropsType) {
+export const Button: React.FC<ButtonProps> = memo((props) => {
+    const {name, callback, className} = props;
+    console.log('Button re-render')
     const onClickHandler = () => {
-        props.callback();
+        callback();
     }
-    return <button className={props.className ? props.className : ''} onClick={onClickHandler}>{props.name}</button>
-}
+    return <button className={className ? className : ''} onClick={onClickHandler}>{name}</button>
+})

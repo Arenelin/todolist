@@ -1,28 +1,30 @@
-import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
+import React, {ChangeEvent, KeyboardEvent, memo, useState} from 'react';
 import {Button} from '../Button';
 
 type AddItemFormProps = {
     callback: (title: string) => void
 }
 
-export const AddItemForm: React.FC<AddItemFormProps> = (props) => {
+export const AddItemForm: React.FC<AddItemFormProps> = memo((props) => {
     const {callback} = props;
+
+    console.log('re-render AddItemForm')
 
     const [newTaskTitle, setNewTaskTitle] = useState('');
     const [error, setError] = useState<string | null>(null);
 
     //Создать title для будущей задачи
     const onNewTitleChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        setError(null);
+        error !== null && setError(null);
         setNewTaskTitle(e.currentTarget.value);
     }
 
     //Запустить функцию добавления элемента с помощью 'Enter'
     const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
-        if (e.charCode === 13 && newTaskTitle.trim()) {
+        if (e.code === 'Enter' && newTaskTitle.trim()) {
             callback(newTaskTitle.trim());
             setNewTaskTitle('');
-        } else {
+        } else if(e.code === 'Enter' && !newTaskTitle.trim()){
             setError('Title is required');
         }
     }
@@ -35,7 +37,6 @@ export const AddItemForm: React.FC<AddItemFormProps> = (props) => {
         } else {
             setError('Title is required');
         }
-
     }
     return (
         <div>
@@ -49,4 +50,4 @@ export const AddItemForm: React.FC<AddItemFormProps> = (props) => {
             {error && <div className="error">Error: title is required</div>}
         </div>
     );
-};
+});

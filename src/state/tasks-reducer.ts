@@ -8,18 +8,7 @@ import {
 import {TasksState} from '../AppWithRedux';
 
 
-const initialState: TasksState = {
-    [todolist_1]: [
-        {id: v1(), title: 'CSS', isDone: true},
-        {id: v1(), title: 'JS', isDone: true},
-        {id: v1(), title: 'React', isDone: false},
-        {id: v1(), title: 'Redux', isDone: false},
-    ],
-    [todolist_2]: [
-        {id: v1(), title: 'Book', isDone: false},
-        {id: v1(), title: 'Milk', isDone: true},
-    ],
-}
+const initialState: TasksState = {}
 
 export const tasksReducer = (state: TasksState = initialState, action: TasksReducer): TasksState => {
     switch (action.type) {

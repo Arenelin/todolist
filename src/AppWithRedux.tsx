@@ -1,10 +1,10 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import './App.css';
-import {TaskType, TodoList} from './TodoList';
 import {AddItemForm} from './components/AddItemForm';
-import {addTodolist, changeTodolistFilter, changeTodolistName, deleteTodolist} from './state/todolists-reducer';
+import {addTodolist} from './state/todolists-reducer';
 import {useDispatch, useSelector} from 'react-redux';
 import {AppRootState} from './state/store';
+import {TaskType, TodoList} from './components/TodoList';
 
 
 export type FilterValues = 'all' | 'active' | 'completed';
@@ -20,43 +20,20 @@ export type TasksState = {
 }
 
 function AppWithRedux() {
-
+    console.log('re-render App')
     const dispatch = useDispatch()
     const todolists =
         useSelector<AppRootState, TodolistType[]>(state => state.todolists)
-    function changeFilter(value: FilterValues, todolistId: string) {
-        dispatch(changeTodolistFilter(todolistId, value))
-    }
 
-    const removeTodolist = (todolistId: string) => {
-        dispatch(deleteTodolist(todolistId))
-    }
-
-    const addNewTodolist = (title: string) => {
+    const addNewTodolist = useCallback((title: string) => {
         const action = addTodolist(title)
         dispatch(action)
-    }
-
-    const changeTodolistTitle = (newTodolistTitle: string, todolistId: string,) => {
-        dispatch(changeTodolistName(todolistId, newTodolistTitle))
-    }
+    }, [dispatch])
 
     return (
         <div className="App">
             <AddItemForm callback={addNewTodolist}/>
-            {todolists.map(tl => {
-                    return (
-                        <TodoList
-                            key={tl.id}
-                            todolistId={tl.id}
-                            title={tl.title}
-                            filter={tl.filter}
-                            changeFilter={changeFilter}
-                            removeTodolist={removeTodolist}
-                            changeTodolistTitle={changeTodolistTitle}
-                        />
-                    )
-                }
+            {todolists.map(tl => <TodoList key={tl.id} todolist={tl}/>
             )}
         </div>
     );

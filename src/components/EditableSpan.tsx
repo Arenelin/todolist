@@ -1,11 +1,12 @@
-import React, {ChangeEvent, useState} from 'react';
+import React, {ChangeEvent, memo, useState} from 'react';
 
 type EditableSpanProps = {
     title: string
     onChangeTitle: (title: string) => void
 }
 
-export const EditableSpan: React.FC<EditableSpanProps> = (props) => {
+export const EditableSpan: React.FC<EditableSpanProps> = memo((props) => {
+    console.log('EditableSpan re-render')
     const {title, onChangeTitle} = props;
 
     const [editMode, setEditMode] = useState<boolean>(false);
@@ -38,4 +39,4 @@ export const EditableSpan: React.FC<EditableSpanProps> = (props) => {
                 onBlur={activateViewMode}
             />
     );
-};
+});
