@@ -1,14 +1,14 @@
 import React, {ChangeEvent, memo, useCallback} from 'react';
-import {EditableSpan} from './EditableSpan';
-import {Button} from '../Button';
-import {changeTaskStatus, changeTitleForTask, deleteTask} from '../state/tasks-reducer';
-import {TaskType} from './TodoList';
+import {EditableSpan} from '../EditableSpan/EditableSpan';
+import {Button} from '../../Button';
+import {changeTaskStatus, changeTitleForTask, deleteTask} from '../../state/reducers/tasks-reducer';
+import {TaskType} from '../Todolist/TodoList';
 import {useDispatch, useSelector} from 'react-redux';
-import {AppRootState} from '../state/store';
+import {AppRootState} from '../../state/store';
 
 type TaskProps = {
     todolistId: string
-    taskId: string
+    taskId:string
 }
 
 export const Task: React.FC<TaskProps> = memo((props) => {

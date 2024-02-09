@@ -1,11 +1,6 @@
 import {v1} from 'uuid';
-import {
-    AddTodolist,
-    DeleteTodolist,
-    todolist_1,
-    todolist_2
-} from './todolists-reducer';
-import {TasksState} from '../AppWithRedux';
+import {AddTodolist, DeleteTodolist} from './todolists-reducer';
+import {TasksState} from '../../AppWithRedux';
 
 
 const initialState: TasksState = {}

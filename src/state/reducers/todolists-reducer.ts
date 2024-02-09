@@ -1,8 +1,5 @@
 import {v1} from 'uuid';
-import {FilterValues, TodolistType} from '../AppWithRedux';
-
-export const todolist_1 = v1();
-export const todolist_2 = v1();
+import {FilterValues, TodolistType} from '../../AppWithRedux';
 
 const initialState: TodolistType[] = [];
 export const todolistsReducer = (state: TodolistType[] = initialState, action: ActionsType): TodolistType[] => {

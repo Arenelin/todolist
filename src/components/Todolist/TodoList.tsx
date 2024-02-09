@@ -1,13 +1,13 @@
 import React, {memo, useCallback} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {TodolistType} from '../AppWithRedux';
-import {AppRootState} from '../state/store';
-import {addNewTask} from '../state/tasks-reducer';
-import {EditableSpan} from './EditableSpan';
-import {Button} from '../Button';
-import {AddItemForm} from './AddItemForm';
-import {changeTodolistFilter, changeTodolistName, deleteTodolist} from '../state/todolists-reducer';
-import {Task} from './Task';
+import {TodolistType} from '../../AppWithRedux';
+import {AppRootState} from '../../state/store';
+import {addNewTask} from '../../state/reducers/tasks-reducer';
+import {EditableSpan} from '../EditableSpan/EditableSpan';
+import {Button} from '../../Button';
+import {AddItemForm} from '../AddItemForm/AddItemForm';
+import {changeTodolistFilter, changeTodolistName, deleteTodolist} from '../../state/reducers/todolists-reducer';
+import {Task} from '../Task/Task';
 
 export type TaskType = {
     id: string
@@ -16,7 +16,7 @@ export type TaskType = {
 }
 
 type TodoListProps = {
-    todolist:TodolistType
+    todolist: TodolistType
 }
 
 export const TodoList: React.FC<TodoListProps> = memo((props) => {
@@ -36,7 +36,7 @@ export const TodoList: React.FC<TodoListProps> = memo((props) => {
             : tasks;
 
     const tasksList: JSX.Element[] = tasksForTodoList.map(t =>
-        <Task key={t.id} todolistId={todolist.id} taskId={t.id}/>
+        <Task taskId={t.id} key={t.id} todolistId={todolist.id}/>
     );
 
     //Добавление таски
@@ -47,12 +47,12 @@ export const TodoList: React.FC<TodoListProps> = memo((props) => {
     //Удаление конкретного тудулиста
     const onClickRemoveTodolist = useCallback(() => {
         dispatch(deleteTodolist(todolist.id))
-    },[dispatch, todolist.id])
+    }, [dispatch, todolist.id])
 
     //Сменить заголовок конкретного тудулиста
     const onChangeTodolistTitle = useCallback((title: string) => {
         dispatch(changeTodolistName(todolist.id, title))
-    },[dispatch, todolist.id])
+    }, [dispatch, todolist.id])
 
     //Смена фильтра конкретного тудулиста
     const changeAllFilterHandler = useCallback(() => {
