@@ -1,11 +1,11 @@
-import React, {ChangeEvent, useState} from 'react';
+import React, {ChangeEvent, memo, useState} from 'react';
 
 type EditableSpanProps = {
     oldTitle: string
     callback: (title: string) => void
 }
 
-export const EditableSpan: React.FC<EditableSpanProps> = (props) => {
+export const EditableSpan: React.FC<EditableSpanProps> = memo((props) => {
     const {oldTitle, callback} = props;
 
     const [editMode, setEditMode] = useState<boolean>(false);
@@ -28,5 +28,5 @@ export const EditableSpan: React.FC<EditableSpanProps> = (props) => {
             onChange={onChangeTitleHandler}/>
         : <span onDoubleClick={changeEditMode}>{oldTitle}</span>
         ;
-};
+});
 

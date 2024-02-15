@@ -1,11 +1,11 @@
-import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
+import React, {ChangeEvent, KeyboardEvent, memo, useState} from 'react';
 import {Button} from './Button';
 
 type AddItemFormProps = {
     callback: (title: string) => void
 }
 
-export const AddItemForm: React.FC<AddItemFormProps> = (props) => {
+export const AddItemForm: React.FC<AddItemFormProps> = memo((props) => {
     const {callback} = props;
 
     const [title, setTitle] = useState('');
@@ -44,5 +44,5 @@ export const AddItemForm: React.FC<AddItemFormProps> = (props) => {
             {inputError && <div className={'error'}>Error: title is required</div>}
         </div>
     );
-};
+});
 

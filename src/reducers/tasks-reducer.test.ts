@@ -1,6 +1,5 @@
-import {TaskObjType, todolistsType} from '../App';
+import {TaskObjType} from '../App';
 import {addNewTask, changeStatusTask, changeTitle, deleteTask, tasksReducer} from './tasks-reducer';
-import {addTodolist, deleteTodolist, todolistsReducer} from './todolists-reducer';
 
 test('correct task should be deleted from correct array', () => {
     const startState: TaskObjType = {
