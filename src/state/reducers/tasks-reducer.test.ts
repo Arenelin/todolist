@@ -1,8 +1,6 @@
 import {v1} from 'uuid';
-import {addNewTask, changeTaskStatus, changeTitleForTask, deleteTask, tasksReducer} from './tasks-reducer';
+import {addNewTask, changeTaskStatus, changeTitleForTask, deleteTask, tasksReducer, TasksState} from './tasks-reducer';
 import {addTodolist, deleteTodolist} from './todolists-reducer';
-import {TasksState} from '../../AppWithRedux';
-
 
 test('correct task should be removed', () => {
     let todolistId1 = v1()

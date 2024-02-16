@@ -1,7 +1,15 @@
 import {v1} from 'uuid';
 import {AddTodolist, DeleteTodolist} from './todolists-reducer';
-import {TasksState} from '../../AppWithRedux';
 
+export type TaskType = {
+    id: string
+    title: string
+    isDone: boolean
+}
+
+export type TasksState = {
+    [key: string]: TaskType[]
+}
 
 const initialState: TasksState = {}
 
