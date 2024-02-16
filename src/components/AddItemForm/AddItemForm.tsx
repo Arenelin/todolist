@@ -1,5 +1,6 @@
-import React, {ChangeEvent, KeyboardEvent, memo, useState} from 'react';
+import React, {memo} from 'react';
 import {Button} from '../Button/Button';
+import {useAddItemForm} from './hooks/useAddItemForm';
 
 type AddItemFormProps = {
     callback: (title: string) => void
@@ -7,37 +8,14 @@ type AddItemFormProps = {
 
 export const AddItemForm: React.FC<AddItemFormProps> = memo((props) => {
     const {callback} = props;
+    const {
+        newTaskTitle,
+        error,
+        onNewTitleChangeHandler,
+        onKeyPressHandler,
+        addItem
+    } = useAddItemForm(callback)
 
-    console.log('re-render AddItemForm')
-
-    const [newTaskTitle, setNewTaskTitle] = useState('');
-    const [error, setError] = useState<string | null>(null);
-
-    //Создать title для будущей задачи
-    const onNewTitleChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        error !== null && setError(null);
-        setNewTaskTitle(e.currentTarget.value);
-    }
-
-    //Запустить функцию добавления элемента с помощью 'Enter'
-    const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
-        if (e.code === 'Enter' && newTaskTitle.trim()) {
-            callback(newTaskTitle.trim());
-            setNewTaskTitle('');
-        } else if(e.code === 'Enter' && !newTaskTitle.trim()){
-            setError('Title is required');
-        }
-    }
-
-    //Добавить элемент в список
-    const addItem = () => {
-        if (newTaskTitle.trim()) {
-            callback(newTaskTitle.trim());
-            setNewTaskTitle('');
-        } else {
-            setError('Title is required');
-        }
-    }
     return (
         <div>
             <input
