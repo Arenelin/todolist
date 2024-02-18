@@ -27,7 +27,7 @@ type TasksResponse = {
     items: TaskType[]
 }
 
-type UpdateTaskModel = {
+export type UpdateTaskModel = {
     title: string
     description: string
     completed: boolean
