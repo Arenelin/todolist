@@ -1,29 +1,30 @@
 import {useDispatch, useSelector} from 'react-redux';
 import {AppRootState} from '../../../state/store';
 import {useCallback} from 'react';
-import {addNewTask, TaskType} from '../../../state/reducers/tasks-reducer';
+import {addNewTask} from '../../../state/reducers/tasks-reducer';
 import {
     changeTodolistFilter,
     changeTodolistName,
     deleteTodolist,
-    TodolistType
+    TodolistDomainType,
 } from '../../../state/reducers/todolists-reducer';
+import {TaskStatuses, TaskType} from '../../../api/tasks-api';
 
-export const useTodolist = (todolist: TodolistType) => {
+export const useTodolist = (todolist: TodolistDomainType) => {
     const dispatch = useDispatch();
 
     const tasks =
         useSelector<AppRootState, TaskType[]>(state => state.tasks[todolist.id])
 
     let tasksForTodoList = todolist.filter === 'active'
-        ? tasks.filter(t => !t.isDone)
+        ? tasks.filter(t => t.status === TaskStatuses.New)
         : todolist.filter === 'completed'
-            ? tasks.filter(t => t.isDone)
+            ? tasks.filter(t => t.status === TaskStatuses.Completed)
             : tasks;
 
     const addTaskForCurrentTodolist = useCallback((title: string) => {
         dispatch(addNewTask(todolist.id, title))
-    }, [todolist.id]);
+    }, [dispatch, todolist.id]);
 
     const onClickRemoveTodolist = useCallback(() => {
         dispatch(deleteTodolist(todolist.id))
@@ -35,11 +36,11 @@ export const useTodolist = (todolist: TodolistType) => {
 
     const changeAllFilterHandler = useCallback(() => {
         dispatch(changeTodolistFilter(todolist.id, 'all'))
-    }, [todolist.id])
+    }, [dispatch, todolist.id])
 
     const changeActiveFilterHandler = useCallback(() => {
         dispatch(changeTodolistFilter(todolist.id, 'active'))
-    }, [todolist.id])
+    }, [dispatch, todolist.id])
 
     const changeCompletedFilterHandler = useCallback(() => {
         dispatch(changeTodolistFilter(todolist.id, 'completed'))

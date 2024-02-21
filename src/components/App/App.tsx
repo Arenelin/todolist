@@ -5,7 +5,7 @@ import {TodoList} from '../Todolist/TodoList';
 import {useApp} from './hooks/useApp';
 
 function App() {
-
+debugger
     const {todolists, addNewTodolist} = useApp()
     const listTodolists = todolists.map(tl => <TodoList key={tl.id} todolist={tl}/> )
 

@@ -4,10 +4,10 @@ import {Button} from '../Button/Button';
 import {AddItemForm} from '../AddItemForm/AddItemForm';
 import {Task} from '../Task/Task';
 import {useTodolist} from './hooks/useTodolist';
-import {TodolistType} from '../../state/reducers/todolists-reducer';
+import {TodolistDomainType} from '../../state/reducers/todolists-reducer';
 
 type TodoListProps = {
-    todolist: TodolistType
+    todolist: TodolistDomainType
 }
 
 export const TodoList: React.FC<TodoListProps> = memo((props) => {

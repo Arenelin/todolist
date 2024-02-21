@@ -1,11 +1,6 @@
 import {v1} from 'uuid';
 import {AddTodolist, DeleteTodolist} from './todolists-reducer';
-
-export type TaskType = {
-    id: string
-    title: string
-    isDone: boolean
-}
+import {TaskPriorities, TaskStatuses, TaskType} from '../../api/tasks-api';
 
 export type TasksState = {
     [key: string]: TaskType[]
@@ -22,19 +17,24 @@ export const tasksReducer = (state: TasksState = initialState, action: TasksRedu
                     .filter(t => t.id !== action.payload.id)
             };
         case 'ADD-TASK':
-            return {
-                ...state,
-                [action.payload.todolistId]: [...state[action.payload.todolistId], {
-                    id: v1(),
-                    title: action.payload.title,
-                    isDone: false
-                }]
-            };
+            const newTask: TaskType = {
+                id: v1(),
+                title: action.payload.title,
+                status: TaskStatuses.New,
+                todoListId: action.payload.todolistId,
+                startDate: '',
+                deadline: '',
+                addedDate: '',
+                order: 0,
+                priority: TaskPriorities.Low,
+                description: ''
+            }
+            return {...state, [action.payload.todolistId]: [...state[action.payload.todolistId], newTask]};
         case 'CHANGE-TASK-STATUS':
             return {
                 ...state, [action.payload.todolistId]: state[action.payload.todolistId]
                     .map(t => t.id === action.payload.id
-                        ? {...t, isDone: action.payload.newValue}
+                        ? {...t, status: action.payload.newStatusValue}
                         : t)
             };
         case 'CHANGE-TASK-TITLE':
@@ -80,13 +80,13 @@ export const addNewTask = (todolistId: string, title: string) => {
         payload: {todolistId, title}
     } as const
 }
-export const changeTaskStatus = (todolistId: string, id: string, newValue: boolean) => {
+export const changeTaskStatus = (todolistId: string, id: string, newStatusValue: TaskStatuses) => {
     return {
         type: 'CHANGE-TASK-STATUS',
         payload: {
             todolistId,
             id,
-            newValue
+            newStatusValue
         }
     } as const
 }

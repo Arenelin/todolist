@@ -72,5 +72,10 @@
     "start-server-and-test": "^2.0.3",
     "storybook": "^7.6.13",
     "webpack": "5.90.1"
+  },
+  "jest": {
+    "moduleNameMapper": {
+      "axios": "axios/dist/node/axios.cjs"
+    }
   }
 }
