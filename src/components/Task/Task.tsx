@@ -1,11 +1,11 @@
-import {changeStatusTask, changeTitle, deleteTask} from '../reducers/tasks-reducer';
-import {UniversalCheckbox} from './UniversalCheckbox';
-import {EditableSpan} from './EditableSpan';
-import {Button} from './Button';
+import {changeStatusTask, changeTitle, deleteTask} from '../../reducers/tasks-reducer';
+import {UniversalCheckbox} from '../UniversalCheckbox';
+import {EditableSpan} from '../EditableSpan/EditableSpan';
+import {Button} from '../Button';
 import React, {memo, useCallback} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {AppRootState} from '../store/store';
-import {TaskType} from './Todolist';
+import {AppRootState} from '../../store/store';
+import {TaskType} from '../Todolist';
 
 type TaskProps = {
     todolistId: string

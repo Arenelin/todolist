@@ -1,10 +1,10 @@
 import React, {useCallback} from 'react';
-import './App.css';
-import {TaskType, Todolist} from './components/Todolist';
-import {AddItemForm} from './components/AddItemForm';
-import {addTodolist} from './reducers/todolists-reducer';
+import '../../App.css';
+import {TaskType, Todolist} from '../Todolist';
+import {AddItemForm} from '../AddItemForm/AddItemForm';
+import {addTodolist} from '../../reducers/todolists-reducer';
 import {useDispatch, useSelector} from 'react-redux';
-import {AppRootState} from './store/store';
+import {AppRootState} from '../../store/store';
 
 export type FilterValuesType = 'all' | 'active' | 'completed';
 

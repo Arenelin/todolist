@@ -1,7 +1,7 @@
 import React, {ChangeEvent, KeyboardEvent, memo, useState} from 'react';
-import {Button} from './Button';
+import {Button} from '../Button';
 
-type AddItemFormProps = {
+export type AddItemFormProps = {
     callback: (title: string) => void
 }
 

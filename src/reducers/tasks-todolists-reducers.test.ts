@@ -1,4 +1,4 @@
-import {TaskObjType, todolistType} from '../App';
+import {TaskObjType, todolistType} from '../components/App/App';
 import {addTodolist, deleteTodolist, todolistsReducer} from './todolists-reducer';
 import {tasksReducer} from './tasks-reducer';
 

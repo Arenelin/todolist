@@ -1,13 +1,13 @@
 import React, {memo, useCallback} from 'react';
 import {Button} from './Button';
-import {AddItemForm} from './AddItemForm';
-import {EditableSpan} from './EditableSpan';
+import {AddItemForm} from './AddItemForm/AddItemForm';
+import {EditableSpan} from './EditableSpan/EditableSpan';
 import {addNewTask} from '../reducers/tasks-reducer';
 import {useDispatch, useSelector} from 'react-redux';
 import {AppRootState} from '../store/store';
 import {changeTitleForTodolist, changeTodolistFilter, deleteTodolist} from '../reducers/todolists-reducer';
-import {todolistType} from '../App';
-import {Task} from './Task';
+import {todolistType} from './App/App';
+import {Task} from './Task/Task';
 
 export type TaskType = {
     id: string

@@ -6,7 +6,7 @@ import {
     deleteTodolist,
     todolistsReducer
 } from './todolists-reducer';
-import {FilterValuesType, todolistType} from '../App';
+import {FilterValuesType, todolistType} from '../components/App/App';
 
 test('correct todolist should be removed', () => {
     let todolistId1 = v1();

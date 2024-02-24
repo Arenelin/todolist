@@ -1,4 +1,4 @@
-import {TaskObjType} from '../App';
+import {TaskObjType} from '../components/App/App';
 import {addNewTask, changeStatusTask, changeTitle, deleteTask, tasksReducer} from './tasks-reducer';
 
 test('correct task should be deleted from correct array', () => {
