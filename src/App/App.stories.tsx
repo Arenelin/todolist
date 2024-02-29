@@ -1,5 +1,5 @@
 import App from './App';
-import {ReduxStoreProviderDecorator} from '../../stories/decorators/ReduxStoreProviderDecorator';
+import {ReduxStoreProviderDecorator} from '../stories/decorators/ReduxStoreProviderDecorator';
 
 export default {
     title: 'App Component',

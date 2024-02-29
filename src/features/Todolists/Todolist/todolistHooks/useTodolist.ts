@@ -1,17 +1,22 @@
-import {useDispatch, useSelector} from 'react-redux';
-import {AppRootState} from '../../../state/store';
-import {useCallback} from 'react';
-import {addNewTask} from '../../../state/reducers/tasks-reducer';
+import {useSelector} from 'react-redux';
+import {AppRootState} from '../../../../App/store';
+import {useCallback, useEffect} from 'react';
+import {addTask, getTasks} from '../../tasksReducer/tasks-reducer';
 import {
     changeTodolistFilter,
-    changeTodolistName,
-    deleteTodolist,
+    removeTodolist,
     TodolistDomainType,
-} from '../../../state/reducers/todolists-reducer';
-import {TaskStatuses, TaskType} from '../../../api/tasks-api';
+    updateTodolistTitle,
+} from '../../todolistsReducer/todolists-reducer';
+import {TaskStatuses, TaskType} from '../../../../api/tasks-api';
+import {useAppDispatch} from '../../../../hooks/hooks';
 
 export const useTodolist = (todolist: TodolistDomainType) => {
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
+
+    useEffect(() => {
+        dispatch(getTasks(todolist.id))
+    }, []);
 
     const tasks =
         useSelector<AppRootState, TaskType[]>(state => state.tasks[todolist.id])
@@ -23,16 +28,16 @@ export const useTodolist = (todolist: TodolistDomainType) => {
             : tasks;
 
     const addTaskForCurrentTodolist = useCallback((title: string) => {
-        dispatch(addNewTask(todolist.id, title))
-    }, [dispatch, todolist.id]);
+        dispatch(addTask(todolist.id, title))
+    }, [dispatch, addTask, todolist.id]);
 
     const onClickRemoveTodolist = useCallback(() => {
-        dispatch(deleteTodolist(todolist.id))
-    }, [dispatch, todolist.id])
+        dispatch(removeTodolist(todolist.id))
+    }, [dispatch, removeTodolist, todolist.id])
 
     const onChangeTodolistTitle = useCallback((title: string) => {
-        dispatch(changeTodolistName(todolist.id, title))
-    }, [dispatch, todolist.id])
+        dispatch(updateTodolistTitle(todolist.id, title))
+    }, [dispatch, updateTodolistTitle, todolist.id])
 
     const changeAllFilterHandler = useCallback(() => {
         dispatch(changeTodolistFilter(todolist.id, 'all'))

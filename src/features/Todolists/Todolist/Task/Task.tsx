@@ -1,8 +1,8 @@
 import React, {memo} from 'react';
-import {EditableSpan} from '../EditableSpan/EditableSpan';
-import {Button} from '../Button/Button';
-import {useTask} from './hooks/useTask';
-import {TaskStatuses} from '../../api/tasks-api';
+import {EditableSpan} from '../../../../components/EditableSpan/EditableSpan';
+import {Button} from '../../../../components/Button/Button';
+import {useTask} from './taskHooks/useTask';
+import {TaskStatuses} from '../../../../api/tasks-api';
 
 type TaskProps = {
     todolistId: string

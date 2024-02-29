@@ -8,6 +8,7 @@ const instance = axios.create({
     }
 })
 
+// types
 export type TodolistType = {
     id: string
     title: string
@@ -22,11 +23,11 @@ type ResponseType<D = {}> = {
     resultCode: number
 }
 
-
+// api
 export const todolistsAPI = {
     getTodolists() {
         return instance.get<TodolistType[]>('/todo-lists')
-        //Типизируя, мы говорим, что axios вернет промис,
+        // Типизируя, мы говорим, что axios вернет промис,
         // который зарезолвится response от axios, внутри которого будет поле date типа TodolistType[]
     },
     createTodolist(title: string) {

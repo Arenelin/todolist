@@ -1,5 +1,5 @@
 import {Task} from './Task';
-import {ReduxStoreProviderDecorator} from '../../stories/decorators/ReduxStoreProviderDecorator';
+import {ReduxStoreProviderDecorator} from '../../../../stories/decorators/ReduxStoreProviderDecorator';
 
 export default {
     title: 'Task Component',

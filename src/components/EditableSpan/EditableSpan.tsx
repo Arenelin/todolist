@@ -1,5 +1,5 @@
 import React, {memo} from 'react';
-import {useEditableSpan} from './hooks/useEditableSpan';
+import {useEditableSpan} from './editableSpanHooks/useEditableSpan';
 
 type EditableSpanProps = {
     title: string

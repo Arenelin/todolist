@@ -1,6 +1,6 @@
 import React, {memo} from 'react';
 import {Button} from '../Button/Button';
-import {useAddItemForm} from './hooks/useAddItemForm';
+import {useAddItemForm} from './addItemFormHooks/useAddItemForm';
 
 type AddItemFormProps = {
     callback: (title: string) => void

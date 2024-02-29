@@ -1,10 +1,10 @@
 import React, {memo} from 'react';
-import {EditableSpan} from '../EditableSpan/EditableSpan';
-import {Button} from '../Button/Button';
-import {AddItemForm} from '../AddItemForm/AddItemForm';
-import {Task} from '../Task/Task';
-import {useTodolist} from './hooks/useTodolist';
-import {TodolistDomainType} from '../../state/reducers/todolists-reducer';
+import {EditableSpan} from '../../../components/EditableSpan/EditableSpan';
+import {Button} from '../../../components/Button/Button';
+import {AddItemForm} from '../../../components/AddItemForm/AddItemForm';
+import {Task} from './Task/Task';
+import {useTodolist} from './todolistHooks/useTodolist';
+import {TodolistDomainType} from '../todolistsReducer/todolists-reducer';
 
 type TodoListProps = {
     todolist: TodolistDomainType

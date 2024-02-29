@@ -1,4 +1,4 @@
-import {ReduxStoreProviderDecorator} from '../../stories/decorators/ReduxStoreProviderDecorator';
+import {ReduxStoreProviderDecorator} from '../../../stories/decorators/ReduxStoreProviderDecorator';
 import {TodoList} from './TodoList';
 
 export default {

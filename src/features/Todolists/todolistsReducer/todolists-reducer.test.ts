@@ -1,12 +1,14 @@
 import {v1} from 'uuid';
 import {
     addTodolist, changeTodolistFilter, changeTodolistName,
-    deleteTodolist, FilterValues, TodolistDomainType,
+    deleteTodolist, FilterValues, setTodolists, TodolistDomainType,
     todolistsReducer
 } from './todolists-reducer';
+import {TodolistType} from '../../../api/todolists-api';
 
 let todolistId1 = v1()
 let todolistId2 = v1()
+let todolistId3 = v1()
 
 let startState: TodolistDomainType[];
 beforeEach(() => {
@@ -24,10 +26,17 @@ test('correct todolist should be removed', () => {
 })
 
 test('correct todolist should be added', () => {
-    let newTodolistTitle = 'New Todolist'
-    const endState = todolistsReducer(startState, addTodolist(newTodolistTitle))
+    const newTodolistTitle = 'New Todolist'
+    const newTodolist: TodolistType = {
+        id: todolistId3,
+        title: newTodolistTitle,
+        addedDate: '',
+        order: 0
+    }
+    const endState = todolistsReducer(startState, addTodolist(newTodolist))
 
     expect(endState.length).toBe(3)
+    expect(endState[0].id).toBeDefined()
     expect(endState[0].title).toBe(newTodolistTitle)
     expect(endState[0].filter).toBe('all')
 })
@@ -47,4 +56,11 @@ test('correct filter of todolist should be changed', () => {
 
     expect(endState[0].filter).toBe('all')
     expect(endState[1].filter).toBe(newFilter)
+})
+test('todolists should be set to the state', () => {
+    const endState = todolistsReducer([], setTodolists(startState))
+
+    expect(endState.length).toBe(2)
+    expect(endState[0].filter).toBe('all')
+    expect(endState[1].filter).toBe('all')
 })

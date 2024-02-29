@@ -93,7 +93,6 @@ export const UpdateTask = () => {
         {
             title: 'title 1',
             description: 'description 1',
-            completed: false,
             status: 0,
             priority: 0,
             startDate: '2024-02-17T08:53:24.073',
@@ -112,9 +111,6 @@ export const UpdateTask = () => {
     }
     const onChangeDescriptionHandler = (e: ChangeEvent<HTMLInputElement>) => {
         setModelTask({...modelTask, description: e.currentTarget.value})
-    }
-    const onChangeCompletedValueHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        setModelTask({...modelTask, completed: e.currentTarget.checked})
     }
     const onChangeStatusHandler = (e: ChangeEvent<HTMLInputElement>) => {
         setModelTask({...modelTask, status: +e.currentTarget.value})
@@ -143,7 +139,6 @@ export const UpdateTask = () => {
             <input placeholder={'Type task id'} onChange={onChangeTaskIdHandler} value={taskId}/>
             <input placeholder={'Type new title for task'} onChange={onChangeTitleHandler} value={modelTask.title}/>
             <input placeholder={'Type new description for task'} onChange={onChangeDescriptionHandler} value={modelTask.description}/>
-            <input type={'checkbox'} onChange={onChangeCompletedValueHandler} checked={modelTask.completed}/>
             <input type={'number'} onChange={onChangeStatusHandler} value={modelTask.status}/>
             <input type={'number'} onChange={onChangePriorityHandler} value={modelTask.priority}/>
             <button onClick={onChangeStartDateHandler}>Set current date for task</button>
