@@ -16,12 +16,10 @@ export const useTask = (todolistId: string, taskId: string) => {
     }, [dispatch, removeTask, todolistId, taskId])
 
     const onChangeTaskTitleHandler = useCallback((title: string) => {
-        // @ts-ignore
         dispatch(updateTask(todolistId, taskId, {title}))
     }, [dispatch, updateTask, todolistId, taskId])
 
     const onChangeStatusTaskHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        // @ts-ignore
         dispatch(updateTask(todolistId, taskId, {
             status: e.currentTarget.checked
                 ? TaskStatuses.Completed

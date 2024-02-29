@@ -16,7 +16,7 @@ export const store = createStore(rootReducer, applyMiddleware(thunk));
 
 export type AppRootState = ReturnType<typeof rootReducer> //Синтаксический сахар обычной типизации через объект
 export type RootState = ReturnType<typeof store.getState>
-export type AppDispatch = ThunkDispatch<RootState, unknown, AnyAction>
+export type AppDispatch = ThunkDispatch<AppRootState, unknown, AnyAction>
 export type AppThunk<ReturnType = void> = ThunkAction<
     ReturnType,
     RootState,

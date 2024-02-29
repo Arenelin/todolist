@@ -70,6 +70,7 @@ const initialGlobalState:AppRootState = {
     }
 };
 
+
 // @ts-ignore
 export const storyBookStore = createStore(rootReducer, initialGlobalState as AppRootState);
 
