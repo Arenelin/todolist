@@ -1,10 +1,11 @@
-import {TaskPriorities, TaskStatuses, TaskType, UpdateTaskModel} from '../api/tasks-api';
+import {TaskPriorities, TaskStatuses, UpdateTaskModel} from '../api/tasks-api';
+import {TaskDomainType} from '../features/Todolists/tasksReducer/tasks-reducer';
 
 export type NewValueType = {
     [key: string]: TaskStatuses | TaskPriorities | string
 }
 
-export const createTaskModel = (task: TaskType, objectChange: NewValueType): UpdateTaskModel => {
+export const createTaskModel = (task: TaskDomainType, objectChange: NewValueType): UpdateTaskModel => {
     return {
         title: task.title,
         status: task.status,

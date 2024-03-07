@@ -1,25 +1,25 @@
-import {useSelector} from 'react-redux';
-import {AppRootState} from '../../../../App/store';
 import {useCallback, useEffect} from 'react';
-import {addTask, getTasks} from '../../tasksReducer/tasks-reducer';
+import {addTask, getTasks, TaskDomainType} from '../../tasksReducer/tasks-reducer';
 import {
     changeTodolistFilter,
     removeTodolist,
     TodolistDomainType,
     updateTodolistTitle,
 } from '../../todolistsReducer/todolists-reducer';
-import {TaskStatuses, TaskType} from '../../../../api/tasks-api';
-import {useAppDispatch} from '../../../../hooks/hooks';
+import {TaskStatuses} from '../../../../api/tasks-api';
+import {useAppDispatch, useAppSelector} from '../../../../hooks/hooks';
 
-export const useTodolist = (todolist: TodolistDomainType) => {
+export const useTodolist = (todolist: TodolistDomainType, demo: boolean) => {
     const dispatch = useAppDispatch();
 
     useEffect(() => {
-        dispatch(getTasks(todolist.id))
+        if (!demo) {
+            dispatch(getTasks(todolist.id))
+        }
     }, []);
 
     const tasks =
-        useSelector<AppRootState, TaskType[]>(state => state.tasks[todolist.id])
+        useAppSelector<TaskDomainType[]>(state => state.tasks[todolist.id])
 
     let tasksForTodoList = todolist.filter === 'active'
         ? tasks.filter(t => t.status === TaskStatuses.New)

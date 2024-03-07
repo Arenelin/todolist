@@ -1,14 +1,12 @@
-import {useSelector} from 'react-redux';
-import {AppRootState} from '../../../../../App/store';
 import {ChangeEvent, useCallback} from 'react';
-import {removeTask, updateTask} from '../../../tasksReducer/tasks-reducer';
-import {TaskStatuses, TaskType} from '../../../../../api/tasks-api';
-import {useAppDispatch} from '../../../../../hooks/hooks';
+import {removeTask, TaskDomainType, updateTask} from '../../../tasksReducer/tasks-reducer';
+import {TaskStatuses} from '../../../../../api/tasks-api';
+import {useAppDispatch, useAppSelector} from '../../../../../hooks/hooks';
 
 export const useTask = (todolistId: string, taskId: string) => {
 
     const dispatch = useAppDispatch()
-    const task = useSelector<AppRootState, TaskType>(state =>
+    const task = useAppSelector<TaskDomainType>(state =>
         state.tasks[todolistId].filter(t => t.id === taskId)[0])
 
     const onRemoveHandler = useCallback(() => {

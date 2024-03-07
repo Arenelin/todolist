@@ -9,5 +9,14 @@ export default {
 
 
 export const TodoListBaseExample = () => {
-    return <TodoList todolist={{id: 'todolistId1', title: 'What to learn', filter: 'all', addedDate:'', order:0}}/>
+    return <TodoList todolist={
+        {
+            id: 'todolistId1',
+            title: 'What to learn',
+            filter: 'all',
+            addedDate: '',
+            order: 0,
+            entityStatus: 'idle'
+        }
+    }/>
 }

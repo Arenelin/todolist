@@ -1,20 +1,23 @@
 import {Provider} from 'react-redux';
-import {combineReducers, createStore} from 'redux';
+import {applyMiddleware, combineReducers, legacy_createStore} from 'redux';
 import {tasksReducer} from '../../features/Todolists/tasksReducer/tasks-reducer';
 import {todolistsReducer} from '../../features/Todolists/todolistsReducer/todolists-reducer';
 import {AppRootState} from '../../App/store';
 import React from 'react';
 import {TaskPriorities, TaskStatuses} from '../../api/tasks-api';
+import {appReducer} from '../../App/app-reducer/app-reducer';
+import {thunk} from 'redux-thunk';
 
 const rootReducer = combineReducers({
     todolists: todolistsReducer,
-    tasks: tasksReducer
+    tasks: tasksReducer,
+    application: appReducer
 })
 
-const initialGlobalState:AppRootState = {
+const initialGlobalState: AppRootState = {
     todolists: [
-        {id: 'todolistId1', title: 'What to learn', filter: 'all', addedDate: '', order: 0},
-        {id: 'todolistId2', title: 'What to buy', filter: 'all', addedDate: '', order: 0}
+        {id: 'todolistId1', title: 'What to learn', filter: 'all', addedDate: '', order: 0, entityStatus: 'idle'},
+        {id: 'todolistId2', title: 'What to buy', filter: 'all', addedDate: '', order: 0, entityStatus: 'loading'}
     ],
     tasks: {
         ['todolistId1']: [
@@ -28,8 +31,9 @@ const initialGlobalState:AppRootState = {
                 addedDate: '',
                 order: 0,
                 priority: TaskPriorities.Low,
-                description: ''
-            },{
+                description: '',
+                entityStatus:'idle'
+            }, {
                 id: '2',
                 title: 'JS',
                 status: TaskStatuses.New,
@@ -39,7 +43,8 @@ const initialGlobalState:AppRootState = {
                 addedDate: '',
                 order: 0,
                 priority: TaskPriorities.Low,
-                description: ''
+                description: '',
+                entityStatus:'idle'
             }
         ],
         ['todolistId2']: [
@@ -53,8 +58,9 @@ const initialGlobalState:AppRootState = {
                 addedDate: '',
                 order: 0,
                 priority: TaskPriorities.Low,
-                description: ''
-            },{
+                description: '',
+                entityStatus:'idle'
+            }, {
                 id: '2',
                 title: 'React Book',
                 status: TaskStatuses.New,
@@ -64,15 +70,17 @@ const initialGlobalState:AppRootState = {
                 addedDate: '',
                 order: 0,
                 priority: TaskPriorities.Low,
-                description: ''
+                description: '',
+                entityStatus:'idle'
             }
         ]
-    }
+    },
+    application: {status: 'idle', error: null}
 };
 
-
-// @ts-ignore
-export const storyBookStore = createStore(rootReducer, initialGlobalState as AppRootState);
+export const storyBookStore =
+    // @ts-ignore
+    legacy_createStore(rootReducer, initialGlobalState as AppRootState, applyMiddleware(thunk));
 
 export const ReduxStoreProviderDecorator = (storyFn: () => React.ReactNode) => {
     return (

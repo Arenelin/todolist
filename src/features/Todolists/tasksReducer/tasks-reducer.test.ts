@@ -1,12 +1,19 @@
 import {v1} from 'uuid';
 import {
-    addNewTask, changeTaskValues,
+    addNewTask, changeTaskEntityStatus,
+    changeTaskValues,
     deleteTask,
+    RequestStatusTaskDomainType,
     setTasks,
     tasksReducer,
     TasksState
 } from './tasks-reducer';
-import {addTodolist, deleteTodolist} from '../todolistsReducer/todolists-reducer';
+import {
+    addTodolist,
+    changeTodolistEntityStatus,
+    deleteTodolist,
+    todolistsReducer
+} from '../todolistsReducer/todolists-reducer';
 import {TaskPriorities, TaskStatuses} from '../../../api/tasks-api';
 import {TodolistType} from '../../../api/todolists-api';
 
@@ -29,7 +36,8 @@ beforeEach(() => {
                 addedDate: '',
                 order: 0,
                 priority: TaskPriorities.Low,
-                description: ''
+                description: '',
+                entityStatus: 'idle'
             },
             {
                 id: '2',
@@ -41,7 +49,8 @@ beforeEach(() => {
                 addedDate: '',
                 order: 0,
                 priority: TaskPriorities.Low,
-                description: ''
+                description: '',
+                entityStatus: 'idle'
             },
             {
                 id: '3',
@@ -53,7 +62,8 @@ beforeEach(() => {
                 addedDate: '',
                 order: 0,
                 priority: TaskPriorities.Low,
-                description: ''
+                description: '',
+                entityStatus: 'idle'
             },
             {
                 id: '4',
@@ -65,7 +75,8 @@ beforeEach(() => {
                 addedDate: '',
                 order: 0,
                 priority: TaskPriorities.Low,
-                description: ''
+                description: '',
+                entityStatus: 'idle'
             },
         ],
         [todolistId2]: [
@@ -79,7 +90,8 @@ beforeEach(() => {
                 addedDate: '',
                 order: 0,
                 priority: TaskPriorities.Low,
-                description: ''
+                description: '',
+                entityStatus: 'idle'
             },
             {
                 id: '2',
@@ -91,7 +103,8 @@ beforeEach(() => {
                 addedDate: '',
                 order: 0,
                 priority: TaskPriorities.Low,
-                description: ''
+                description: '',
+                entityStatus: 'idle'
             },
         ],
     }
@@ -220,4 +233,13 @@ test('tasks should be added for todolist', () => {
     expect(endState[todolistId2].length).toBe(0)
     expect(endState[todolistId1][1].title).toBe('JS')
     expect(endState[todolistId2]).toStrictEqual([])
+})
+
+test('correct entity status of task should be changed', () => {
+    const newStatus: RequestStatusTaskDomainType = 'loading'
+    const endState =
+        tasksReducer(startState, changeTaskEntityStatus(todolistId1, startState[todolistId1][3].id, newStatus))
+
+    expect(endState[todolistId1][3].entityStatus).toBe(newStatus)
+    expect(endState[todolistId1][3].title).toBe('Redux')
 })

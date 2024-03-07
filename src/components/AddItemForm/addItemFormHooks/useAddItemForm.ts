@@ -9,7 +9,6 @@ export const useAddItemForm = (onItemAdded: (title: string) => void) => {
         error !== null && setError(null);
         setNewTaskTitle(e.currentTarget.value);
     }
-
     const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
         if (e.code === 'Enter' && newTaskTitle.trim()) {
             onItemAdded(newTaskTitle.trim());
@@ -18,7 +17,6 @@ export const useAddItemForm = (onItemAdded: (title: string) => void) => {
             setError('Title is required');
         }
     }
-
     const addItem = () => {
         if (newTaskTitle.trim()) {
             onItemAdded(newTaskTitle.trim());
