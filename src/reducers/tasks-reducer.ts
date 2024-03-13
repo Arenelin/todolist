@@ -1,6 +1,6 @@
 import {TaskObjType} from '../components/App/App';
 import {v1} from 'uuid';
-import {AddTodolist, RemoveTodolist, todolist_1, todolist_2} from './todolists-reducer';
+import {AddTodolist, RemoveTodolist, SetTodolists, todolist_1, todolist_2} from './todolists-reducer';
 
 const initialState: TaskObjType = {
     [todolist_1]: [
@@ -44,9 +44,14 @@ export const tasksReducer = (state: TaskObjType = initialState, action: TasksRed
             }
         case 'ADD-TODOLIST':
             return {...state, [action.payload.todolistId]: []}
-        case 'REMOVE-TODOLIST':
+        case 'REMOVE-TODOLIST': {
             const stateCopy = {...state}
             delete stateCopy[action.payload.todolistId]
+            return stateCopy
+        }
+        case 'SET-TODOLISTS':
+            const stateCopy = {...state}
+            action.payload.todolists.forEach(t => stateCopy[t.id] = [])
             return stateCopy
         default:
             return state
@@ -60,6 +65,7 @@ type TasksReducer =
     | ChangeStatusTask
     | ChangeTitle
     | AddTodolist
+    | SetTodolists
 
 type RemoveTask = ReturnType<typeof deleteTask>
 type AddNewTask = ReturnType<typeof addNewTask>

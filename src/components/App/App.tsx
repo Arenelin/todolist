@@ -1,10 +1,9 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import '../../App.css';
 import {TaskType, Todolist} from '../Todolist';
 import {AddItemForm} from '../AddItemForm/AddItemForm';
-import {addTodolist} from '../../reducers/todolists-reducer';
-import {useDispatch, useSelector} from 'react-redux';
-import {AppRootState} from '../../store/store';
+import {addTodolist, getTodolists, TodolistDomainType} from '../../reducers/todolists-reducer';
+import {useAppDispatch, useAppSelector} from '../../hooks/hooks';
 
 export type FilterValuesType = 'all' | 'active' | 'completed';
 
@@ -19,15 +18,18 @@ export type TaskObjType = {
 }
 
 function App() {
-    console.log('re-render App')
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
     const todolists =
-        useSelector<AppRootState, todolistType[]>(state => state.todolists)
+        useAppSelector<TodolistDomainType[]>(state => state.todolists)
 
     const addNewTodolist = useCallback((title: string) => {
         const action = addTodolist(title)
         dispatch(action)
     },[dispatch, addTodolist])
+
+    useEffect(() => {
+        dispatch(getTodolists())
+    }, []);
 
     return (
         <div className="App">

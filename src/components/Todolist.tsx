@@ -1,4 +1,4 @@
-import React, {memo, useCallback} from 'react';
+import React, {memo, useCallback, useEffect} from 'react';
 import {Button} from './Button';
 import {AddItemForm} from './AddItemForm/AddItemForm';
 import {EditableSpan} from './EditableSpan/EditableSpan';
@@ -25,6 +25,10 @@ export const Todolist: React.FC<TodolistProps> = memo((props) => {
     const dispatch = useDispatch()
     const tasks =
         useSelector<AppRootState, TaskType[]>(state => state.tasks[todolist.id])
+
+    useEffect(() => {
+        // dispatch()
+    }, []);
 
     const tasksForTodolist = todolist.filter === 'active'
         ? tasks.filter(t => !t.isDone)
