@@ -1,21 +1,17 @@
 import {v1} from 'uuid';
 import {
-    addNewTask, changeTaskEntityStatus,
+    addNewTask,
+    changeTaskEntityStatus,
     changeTaskValues,
     deleteTask,
-    RequestStatusTaskDomainType,
     setTasks,
     tasksReducer,
     TasksState
 } from './tasks-reducer';
-import {
-    addTodolist,
-    changeTodolistEntityStatus,
-    deleteTodolist,
-    todolistsReducer
-} from '../todolistsReducer/todolists-reducer';
+import {addTodolist, deleteTodolist} from '../todolistsReducer/todolists-reducer';
 import {TaskPriorities, TaskStatuses} from '../../../api/tasks-api';
 import {TodolistType} from '../../../api/todolists-api';
+import {RequestStatusType} from "../../../App/app-reducer/app-reducer";
 
 let todolistId1 = v1()
 let todolistId2 = v1()
@@ -236,7 +232,7 @@ test('tasks should be added for todolist', () => {
 })
 
 test('correct entity status of task should be changed', () => {
-    const newStatus: RequestStatusTaskDomainType = 'loading'
+    const newStatus: RequestStatusType = 'loading'
     const endState =
         tasksReducer(startState, changeTaskEntityStatus(todolistId1, startState[todolistId1][3].id, newStatus))
 

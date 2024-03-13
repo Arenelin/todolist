@@ -1,11 +1,11 @@
 import {todolistsAPI, TodolistType} from '../../../api/todolists-api';
 import {AppDispatch} from '../../../App/store';
-import {setAppStatus, RequestStatusType} from '../../../App/app-reducer/app-reducer';
+import {RequestStatusType, setAppStatus} from '../../../App/app-reducer/app-reducer';
+import {handleServerAppError, handleServerNetworkError} from "../../../utils/error-utils";
 
 // types
 export type FilterValues = 'all' | 'active' | 'completed';
-export type RequestStatusTodolistType = Omit<RequestStatusType, 'addingTodolistEntity'> | 'addingTaskEntity'
-export type TodolistDomainType = TodolistType & { filter: FilterValues, entityStatus: RequestStatusTodolistType }
+export type TodolistDomainType = TodolistType & { filter: FilterValues, entityStatus: RequestStatusType }
 const initialState: TodolistDomainType[] = [];
 type ActionsType =
     | DeleteTodolist
@@ -53,39 +53,61 @@ export const changeTodolistName = (id: string, title: string) =>
     ({type: 'CHANGE-TODOLIST-TITLE', payload: {id, title}}) as const
 export const changeTodolistFilter = (id: string, filter: FilterValues) =>
     ({type: 'CHANGE-TODOLIST-FILTER', payload: {id, filter}}) as const
-export const changeTodolistEntityStatus = (id: string, status: RequestStatusTodolistType) =>
+export const changeTodolistEntityStatus = (id: string, status: RequestStatusType) =>
     ({type: 'CHANGE-TODOLIST-ENTITY-STATUS', payload: {id, status}}) as const
 export const setTodolists = (todolists: TodolistType[]) =>
     ({type: 'SET-TODOLISTS', payload: {todolists}}) as const
 
 // thunks
 export const getTodolists = () => (dispatch: AppDispatch) => {
-    dispatch(setAppStatus('loading'))
     todolistsAPI.getTodolists()
         .then(res => {
             dispatch(setTodolists(res.data))
         })
+        .finally(() => dispatch(setAppStatus('succeeded')))
 }
 export const removeTodolist = (todolistId: string) => (dispatch: AppDispatch) => {
     dispatch(changeTodolistEntityStatus(todolistId, 'loading'))
     todolistsAPI.deleteTodolist(todolistId)
-        .then(() => {
-            dispatch(deleteTodolist(todolistId))
+        .then(res => {
+            if (res.data.resultCode !== 0) {
+                handleServerAppError(res.data, dispatch)
+            } else {
+                dispatch(deleteTodolist(todolistId))
+            }
         })
+        .catch(error => {
+            handleServerNetworkError(error.message, dispatch)
+        })
+        .finally(() => dispatch(changeTodolistEntityStatus(todolistId, 'idle')))
 }
 export const createNewTodolist = (title: string) => (dispatch: AppDispatch) => {
-    dispatch(setAppStatus('addingTodolistEntity'))
+    dispatch(setAppStatus('loading'))
     todolistsAPI.createTodolist(title)
         .then((res) => {
-            dispatch(addTodolist(res.data.data.item))
-            dispatch(setAppStatus('idle'))
+            if (res.data.resultCode !== 0) {
+                const test = handleServerAppError(res.data, dispatch)
+                console.log(test)
+            } else {
+                dispatch(addTodolist(res.data.data.item))
+            }
         })
+        .catch(error => {
+            handleServerNetworkError(error.message, dispatch)
+        })
+        .finally(() => dispatch(setAppStatus('idle')))
 }
 export const updateTodolistTitle = (todolistId: string, newTitle: string) => (dispatch: AppDispatch) => {
-    dispatch(changeTodolistEntityStatus(todolistId, 'loading'))
+    dispatch(setAppStatus('loading'))
     todolistsAPI.updateTodolist(todolistId, newTitle)
-        .then(() => {
-            dispatch(changeTodolistName(todolistId, newTitle))
-            dispatch(changeTodolistEntityStatus(todolistId, 'succeeded'))
+        .then(res => {
+            if (res.data.resultCode !== 0) {
+                handleServerAppError(res.data, dispatch)
+            } else {
+                dispatch(changeTodolistName(todolistId, newTitle))
+            }
+        })
+        .catch(error => {
+            handleServerNetworkError(error.message, dispatch)
         })
 }

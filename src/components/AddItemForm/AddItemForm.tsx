@@ -4,10 +4,11 @@ import {useAddItemForm} from './addItemFormHooks/useAddItemForm';
 
 type AddItemFormProps = {
     callback: (title: string) => void
+    disabled?:boolean
 }
 
 export const AddItemForm: React.FC<AddItemFormProps> = memo((props) => {
-    const {callback} = props;
+    const {callback,disabled} = props;
     const {
         newTaskTitle,
         error,
@@ -23,8 +24,9 @@ export const AddItemForm: React.FC<AddItemFormProps> = memo((props) => {
                 onChange={onNewTitleChangeHandler}
                 onKeyDown={onKeyPressHandler}
                 className={error ? 'error-input' : ''}
+                disabled={disabled}
             />
-            <Button name={'+'} callback={addItem}/>
+            <Button name={'+'} callback={addItem} disabled={disabled}/>
             {error && <div className="error">Error: title is required</div>}
         </div>
     );

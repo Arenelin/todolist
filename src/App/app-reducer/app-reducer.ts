@@ -1,6 +1,6 @@
 // types
-export type RequestStatusType = 'idle' | 'loading' | 'succeeded' | 'failed' | 'addingTodolistEntity'
-type ErrorType = string | null
+export type RequestStatusType = 'idle' | 'loading' | 'succeeded' | 'failed'
+export type ErrorType = string | null
 export type ApplicationStateType = {
     status: RequestStatusType
     error: ErrorType
@@ -10,7 +10,7 @@ type ActionsType =
     | ReturnType<typeof setAppError>
 
 const initialState: ApplicationStateType = {
-    status: 'idle',
+    status: 'loading',
     error: null
 }
 

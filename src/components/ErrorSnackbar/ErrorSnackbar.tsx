@@ -1,31 +1,32 @@
-import React from 'react';
-import {notification} from 'antd';
-import {useAppDispatch, useAppSelector} from '../../hooks/hooks';
-import {setAppError} from '../../App/app-reducer/app-reducer';
+import * as React from 'react';
+import Snackbar from '@mui/material/Snackbar';
+import {useAppDispatch, useAppSelector} from "../../hooks/hooks";
+import {ErrorType, setAppError} from "../../App/app-reducer/app-reducer";
+import AlertTitle from "@mui/material/AlertTitle";
+import Alert from "@mui/material/Alert";
 
-type NotificationType = 'success' | 'info' | 'warning' | 'error';
-
-export const ErrorSnackbar: React.FC = () => {
-    const [api, contextHolder] = notification.useNotification();
-    const error = useAppSelector(state => state.application.error)
+export const ErrorSnackbar = () => {
+    const error = useAppSelector<ErrorType>(state => state.application.error)
     const dispatch = useAppDispatch()
-
-    if (error !== null) {
-        const openNotificationWithIcon = (type: NotificationType) => {
-            api[type]({
-                message: 'Error!',
-                description: `${error}`,
-                onClose: () => dispatch(setAppError(null)),
-                duration: 5
-            });
-        };
-        openNotificationWithIcon('error')
-    }
+    const handleClose = (event: React.SyntheticEvent | Event, reason?: string) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        dispatch(setAppError(null))
+    };
 
     return (
-        <>
-            {contextHolder}
-        </>
+        <div>
+            <Snackbar
+                open={!!error}
+                autoHideDuration={5000}
+                onClose={handleClose}
+            >
+                <Alert severity="error">
+                    <AlertTitle>Error</AlertTitle>
+                    {error}
+                </Alert>
+            </Snackbar>
+        </div>
     );
-};
-
+}

@@ -3,9 +3,9 @@ import './App.css';
 import {AddItemForm} from '../components/AddItemForm/AddItemForm';
 import {useApp} from './appHooks/useApp';
 import {TodolistsList} from '../features/Todolists/TodolistsList';
-import {ErrorSnackbar} from '../components/ErrorSnackbar/ErrorSnackbar';
-import {Spin} from 'antd';
-import {LoadingOutlined} from '@ant-design/icons';
+import LinearProgress from '@mui/material/LinearProgress';
+import Stack from '@mui/material/Stack';
+import {ErrorSnackbar} from "../components/ErrorSnackbar/ErrorSnackbar";
 
 type AppProps = {
     demo?: boolean
@@ -16,17 +16,17 @@ export const App: React.FC<AppProps> = (props) => {
     const {addNewTodolist, status} = useApp()
     return (
         <div className="App">
+            <ErrorSnackbar/>
             <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px'}}>
                 <AddItemForm callback={addNewTodolist}/>
-                {status === 'addingTodolistEntity' &&
-                    <Spin
-                        indicator={<LoadingOutlined style={{fontSize: 20}} spin rev={undefined}/>}
-                    />}
+                {status === 'loading' &&
+                    <Stack sx={{width: '100%', color: 'grey.500'}} spacing={2}>
+                        <LinearProgress color="secondary"/>
+                        <LinearProgress color="success"/>
+                        <LinearProgress color="inherit"/>
+                    </Stack>}
             </div>
             <TodolistsList demo={demo}/>
-            {status === 'loading' &&
-                <Spin spinning={true} fullscreen/>}
-            <ErrorSnackbar/>
         </div>
     );
 }
