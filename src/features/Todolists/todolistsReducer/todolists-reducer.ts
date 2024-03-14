@@ -64,6 +64,7 @@ export const getTodolists = () => (dispatch: AppDispatch) => {
         .then(res => {
             dispatch(setTodolists(res.data))
         })
+        .catch(error => handleServerNetworkError(error.message, dispatch))
         .finally(() => dispatch(setAppStatus('succeeded')))
 }
 export const removeTodolist = (todolistId: string) => (dispatch: AppDispatch) => {
@@ -86,8 +87,7 @@ export const createNewTodolist = (title: string) => (dispatch: AppDispatch) => {
     todolistsAPI.createTodolist(title)
         .then((res) => {
             if (res.data.resultCode !== 0) {
-                const test = handleServerAppError(res.data, dispatch)
-                console.log(test)
+                handleServerAppError(res.data, dispatch)
             } else {
                 dispatch(addTodolist(res.data.data.item))
             }
