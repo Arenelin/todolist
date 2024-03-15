@@ -1,21 +1,9 @@
 import React, {useCallback, useEffect} from 'react';
 import '../../App.css';
-import {TaskType, Todolist} from '../Todolist';
 import {AddItemForm} from '../AddItemForm/AddItemForm';
-import {addTodolist, getTodolists, TodolistDomainType} from '../../reducers/todolists-reducer';
+import {createTodolist, getTodolists, TodolistDomainType} from '../../reducers/todolists-reducer';
 import {useAppDispatch, useAppSelector} from '../../hooks/hooks';
-
-export type FilterValuesType = 'all' | 'active' | 'completed';
-
-export type todolistType = {
-    id: string,
-    title: string,
-    filter: FilterValuesType
-}
-
-export type TaskObjType = {
-    [key: string]: TaskType[]
-}
+import {Todolist} from "../Todolist";
 
 function App() {
     const dispatch = useAppDispatch();
@@ -23,9 +11,8 @@ function App() {
         useAppSelector<TodolistDomainType[]>(state => state.todolists)
 
     const addNewTodolist = useCallback((title: string) => {
-        const action = addTodolist(title)
-        dispatch(action)
-    },[dispatch, addTodolist])
+        dispatch(createTodolist(title))
+    }, [dispatch, createTodolist])
 
     useEffect(() => {
         dispatch(getTodolists())
@@ -34,9 +21,7 @@ function App() {
     return (
         <div className="App">
             <AddItemForm callback={addNewTodolist}/>
-            {todolists.map(tl => {
-                return <Todolist key={tl.id} todolist={tl}/>
-            })}
+            {todolists.map(tl => <Todolist key={tl.id} todolist={tl}/>)}
         </div>
     );
 }
