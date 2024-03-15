@@ -23,7 +23,8 @@ export const authReducer = (state: InitialStateType = initialState, action: Acti
 }
 
 // actions
-export const setIsLoggedIn = (value: boolean) => ({type: 'login/SET-IS-LOGGED-IN', payload: {value}}) as const
+export const setIsLoggedIn = (value: boolean) =>
+    ({type: 'login/SET-IS-LOGGED-IN', payload: {value}}) as const
 
 // thunks
 export const login = (authData: AuthDataType) => (dispatch: AppDispatch) => {

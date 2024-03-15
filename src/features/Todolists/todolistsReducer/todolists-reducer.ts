@@ -15,6 +15,10 @@ type ActionsType =
     | ReturnType<typeof changeTodolistFilter>
     | ReturnType<typeof changeTodolistEntityStatus>
 
+export type DeleteTodolist = ReturnType<typeof deleteTodolist>
+export type AddTodolist = ReturnType<typeof addTodolist>
+export type SetTodolists = ReturnType<typeof setTodolists>
+
 // reducer
 export const todolistsReducer = (state: TodolistDomainType[] = initialState, action: ActionsType): TodolistDomainType[] => {
     switch (action.type) {
@@ -42,9 +46,6 @@ export const todolistsReducer = (state: TodolistDomainType[] = initialState, act
 }
 
 // actions
-export type DeleteTodolist = ReturnType<typeof deleteTodolist>
-export type AddTodolist = ReturnType<typeof addTodolist>
-export type SetTodolists = ReturnType<typeof setTodolists>
 export const deleteTodolist = (id: string) =>
     ({type: 'REMOVE-TODOLIST', payload: {id}}) as const
 export const addTodolist = (todolist: TodolistType) =>
