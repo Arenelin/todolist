@@ -32,7 +32,7 @@ const initialGlobalState: AppRootState = {
                 order: 0,
                 priority: TaskPriorities.Low,
                 description: '',
-                entityStatus:'idle'
+                entityStatus: 'idle'
             }, {
                 id: '2',
                 title: 'JS',
@@ -44,7 +44,7 @@ const initialGlobalState: AppRootState = {
                 order: 0,
                 priority: TaskPriorities.Low,
                 description: '',
-                entityStatus:'idle'
+                entityStatus: 'idle'
             }
         ],
         ['todolistId2']: [
@@ -59,7 +59,7 @@ const initialGlobalState: AppRootState = {
                 order: 0,
                 priority: TaskPriorities.Low,
                 description: '',
-                entityStatus:'idle'
+                entityStatus: 'idle'
             }, {
                 id: '2',
                 title: 'React Book',
@@ -71,11 +71,12 @@ const initialGlobalState: AppRootState = {
                 order: 0,
                 priority: TaskPriorities.Low,
                 description: '',
-                entityStatus:'idle'
+                entityStatus: 'idle'
             }
         ]
     },
-    application: {status: 'idle', error: null}
+    application: {status: 'idle', error: null, isInitialized: false},
+    auth: {isLoggedIn: false}
 };
 
 export const storyBookStore =

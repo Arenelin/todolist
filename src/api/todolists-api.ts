@@ -23,6 +23,11 @@ type ResponseType<D = {}> = {
     resultCode: number
 }
 
+export enum Result_Code{
+    SUCCEEDED,
+    ERROR
+}
+
 // api
 export const todolistsAPI = {
     getTodolists() {

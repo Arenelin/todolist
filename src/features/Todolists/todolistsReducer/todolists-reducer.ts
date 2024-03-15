@@ -1,4 +1,4 @@
-import {todolistsAPI, TodolistType} from '../../../api/todolists-api';
+import {Result_Code, todolistsAPI, TodolistType} from '../../../api/todolists-api';
 import {AppDispatch} from '../../../App/store';
 import {RequestStatusType, setAppStatus} from '../../../App/app-reducer/app-reducer';
 import {handleServerAppError, handleServerNetworkError} from "../../../utils/error-utils";
@@ -60,33 +60,33 @@ export const setTodolists = (todolists: TodolistType[]) =>
 
 // thunks
 export const getTodolists = () => (dispatch: AppDispatch) => {
+    dispatch(setAppStatus('loading'))
     todolistsAPI.getTodolists()
         .then(res => {
             dispatch(setTodolists(res.data))
         })
         .catch(error => handleServerNetworkError(error.message, dispatch))
-        .finally(() => dispatch(setAppStatus('succeeded')))
+        .finally(()=>dispatch(setAppStatus('idle')))
 }
 export const removeTodolist = (todolistId: string) => (dispatch: AppDispatch) => {
     dispatch(changeTodolistEntityStatus(todolistId, 'loading'))
     todolistsAPI.deleteTodolist(todolistId)
         .then(res => {
-            if (res.data.resultCode !== 0) {
+            if (res.data.resultCode !== Result_Code.SUCCEEDED) {
                 handleServerAppError(res.data, dispatch)
             } else {
                 dispatch(deleteTodolist(todolistId))
             }
         })
-        .catch(error => {
-            handleServerNetworkError(error.message, dispatch)
-        })
+        .catch(error => handleServerNetworkError(error.message, dispatch)
+        )
         .finally(() => dispatch(changeTodolistEntityStatus(todolistId, 'idle')))
 }
 export const createNewTodolist = (title: string) => (dispatch: AppDispatch) => {
     dispatch(setAppStatus('loading'))
     todolistsAPI.createTodolist(title)
         .then((res) => {
-            if (res.data.resultCode !== 0) {
+            if (res.data.resultCode !== Result_Code.SUCCEEDED) {
                 handleServerAppError(res.data, dispatch)
             } else {
                 dispatch(addTodolist(res.data.data.item))
@@ -101,7 +101,7 @@ export const updateTodolistTitle = (todolistId: string, newTitle: string) => (di
     dispatch(setAppStatus('loading'))
     todolistsAPI.updateTodolist(todolistId, newTitle)
         .then(res => {
-            if (res.data.resultCode !== 0) {
+            if (res.data.resultCode !== Result_Code.SUCCEEDED) {
                 handleServerAppError(res.data, dispatch)
             } else {
                 dispatch(changeTodolistName(todolistId, newTitle))
@@ -110,4 +110,5 @@ export const updateTodolistTitle = (todolistId: string, newTitle: string) => (di
         .catch(error => {
             handleServerNetworkError(error.message, dispatch)
         })
+        .finally(() => dispatch(setAppStatus('idle')))
 }

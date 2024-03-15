@@ -4,6 +4,7 @@ import {AppDispatch, AppRootState} from '../../../App/store';
 import {createTaskModel} from '../../../utils/createTaskModel';
 import {RequestStatusType, setAppStatus} from '../../../App/app-reducer/app-reducer';
 import {handleServerAppError, handleServerNetworkError} from '../../../utils/error-utils';
+import {Result_Code} from "../../../api/todolists-api";
 
 // types
 export type UpdateDomainTaskModelType = {
@@ -98,18 +99,19 @@ export const changeTaskEntityStatus = (todolistId: string, taskId: string, statu
 
 // thunks
 export const getTasks = (todolistId: string) => (dispatch: AppDispatch) => {
+    dispatch(setAppStatus('loading'))
     tasksAPI.getTasks(todolistId)
         .then(res => {
             dispatch(setTasks(todolistId, res.data.items))
         })
         .catch(error => handleServerNetworkError(error.message, dispatch))
-        .finally(() => dispatch(setAppStatus('succeeded')))
+        .finally(() => dispatch(setAppStatus('idle')))
 }
 export const removeTask = (todolistId: string, taskId: string) => (dispatch: AppDispatch) => {
     dispatch(changeTaskEntityStatus(todolistId, taskId, 'loading'))
     tasksAPI.deleteTask(todolistId, taskId)
         .then(res => {
-            if (res.data.resultCode !== 0) {
+            if (res.data.resultCode !== Result_Code.SUCCEEDED) {
                 handleServerAppError(res.data, dispatch)
             } else {
                 dispatch(deleteTask(todolistId, taskId))
@@ -124,7 +126,7 @@ export const addTask = (todolistId: string, title: string) => (dispatch: AppDisp
     dispatch(setAppStatus('loading'))
     tasksAPI.createTask(todolistId, title)
         .then(res => {
-            if (res.data.resultCode !== 0) {
+            if (res.data.resultCode !== Result_Code.SUCCEEDED) {
                 handleServerAppError(res.data, dispatch)
             } else {
                 dispatch(addNewTask(res.data.data.item))
@@ -147,7 +149,7 @@ export const updateTask = (todolistId: string, taskId: string, domainModel: Upda
         dispatch(setAppStatus('loading'))
         tasksAPI.updateTask(todolistId, taskId, apiModel)
             .then(res => {
-                if (res.data.resultCode !== 0) {
+                if (res.data.resultCode !== Result_Code.SUCCEEDED) {
                     handleServerAppError(res.data, dispatch)
                 } else {
                     dispatch(changeTaskValues(todolistId, taskId, domainModel))

@@ -2,7 +2,7 @@ import {ApplicationStateType, appReducer, setAppError, setAppStatus} from './app
 
 let startState: ApplicationStateType;
 beforeEach(() => {
-    startState = {status: 'idle', error: null}
+    startState = {status: 'idle', error: null, isInitialized: false}
 
 })
 

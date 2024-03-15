@@ -3,11 +3,13 @@ import {todolistsReducer} from '../features/Todolists/todolistsReducer/todolists
 import {tasksReducer} from '../features/Todolists/tasksReducer/tasks-reducer';
 import {thunk, ThunkAction, ThunkDispatch} from 'redux-thunk';
 import {appReducer} from './app-reducer/app-reducer';
+import {authReducer} from "../features/Login/auth-reducer";
 
 const rootReducer = combineReducers({
     tasks: tasksReducer,
     todolists: todolistsReducer,
-    application: appReducer
+    application: appReducer,
+    auth: authReducer
 })
 //При вызове функции выше на месте вызова редьюсеров в ключах сохраняется стейт
 // и мы типизируем ниже как возврат этих функций, объектов того типа, которые они возвращают
