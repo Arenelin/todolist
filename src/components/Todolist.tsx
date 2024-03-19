@@ -2,17 +2,12 @@ import React, {memo, useCallback, useEffect} from 'react';
 import {Button} from './Button';
 import {AddItemForm} from './AddItemForm/AddItemForm';
 import {EditableSpan} from './EditableSpan/EditableSpan';
-import {addNewTask, addTask, getTasks} from '../reducers/tasks-reducer';
-import {
-    changeTitleForTodolist,
-    changeTodolistFilter,
-    deleteTodolist, removeTodolist,
-    TodolistDomainType, updateTodolist
-} from '../reducers/todolists-reducer';
+import {addTask, getTasks, TaskDomainType} from '../reducers/tasks-reducer';
+import {changeTodolistFilter, removeTodolist, TodolistDomainType, updateTodolist} from '../reducers/todolists-reducer';
 import {Task} from './Task/Task';
 import {useAppDispatch, useAppSelector} from "../hooks/hooks";
-import {TaskStatuses, TaskType} from "../api/tasks-api";
-
+import {TaskStatuses} from "../api/tasks-api";
+import Skeleton from '@mui/material/Skeleton';
 
 type TodolistProps = {
     todolist: TodolistDomainType
@@ -23,7 +18,7 @@ export const Todolist: React.FC<TodolistProps> = memo((props) => {
 
     const dispatch = useAppDispatch()
     const tasks =
-        useAppSelector<TaskType[]>(state => state.tasks[todolist.id])
+        useAppSelector<TaskDomainType[]>(state => state.tasks[todolist.id])
 
     useEffect(() => {
         dispatch(getTasks(todolist.id))
@@ -37,7 +32,11 @@ export const Todolist: React.FC<TodolistProps> = memo((props) => {
 
     const tasksList: JSX.Element =
         <ul>
-            {tasksForTodolist.map(t => <Task key={t.id} todolistId={todolist.id} taskId={t.id}/>)}
+            {tasksForTodolist.map(t => {
+                return todolist.entityStatus === 'loading'
+                    ? <Skeleton animation="wave"><Task key={t.id} todolistId={todolist.id} taskId={t.id}/></Skeleton>
+                    : <Task key={t.id} todolistId={todolist.id} taskId={t.id}/>
+            })}
         </ul>
 
 
@@ -66,24 +65,29 @@ export const Todolist: React.FC<TodolistProps> = memo((props) => {
     }, [dispatch, changeTodolistFilter, todolist.id])
 
     return (
-        <div className="todoList">
-            <h3>
-                <EditableSpan oldTitle={todolist.title} callback={onChangeTodolistTitleHandler}/>
-                <Button title={'x'} callback={removeTodolistHandler}/>
-            </h3>
-            <AddItemForm callback={addTaskHandler}/>
-            {tasksList}
-            <div>
-                <Button className={todolist.filter === 'all' ? 'btn-active' : ''}
-                        callback={changeAllFilter}
-                        title={'All'}/>
-                <Button className={todolist.filter === 'active' ? 'btn-active' : ''}
-                        callback={changeActiveFilter}
-                        title={'Active'}/>
-                <Button className={todolist.filter === 'completed' ? 'btn-active' : ''}
-                        callback={changeCompletedFilter}
-                        title={'Completed'}/>
+        <>
+            <div className="todoList">
+                <h3>
+                    <EditableSpan oldTitle={todolist.title} callback={onChangeTodolistTitleHandler}
+                                  disabled={todolist.entityStatus === 'loading'}/>
+                    <Button title={'x'} callback={removeTodolistHandler}
+                            disabled={todolist.entityStatus === 'loading'}/>
+                </h3>
+                <AddItemForm callback={addTaskHandler} disabled={todolist.entityStatus === 'loading'}/>
+                {tasksList}
+                <div>
+                    <Button className={todolist.filter === 'all' ? 'btn-active' : ''}
+                            callback={changeAllFilter}
+                            title={'All'}/>
+                    <Button className={todolist.filter === 'active' ? 'btn-active' : ''}
+                            callback={changeActiveFilter}
+                            title={'Active'}/>
+                    <Button className={todolist.filter === 'completed' ? 'btn-active' : ''}
+                            callback={changeCompletedFilter}
+                            title={'Completed'}/>
+                </div>
             </div>
-        </div>
+        </>
+
     )
 })

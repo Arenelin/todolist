@@ -59,7 +59,7 @@ const AddItemFormWithError: React.FC<AddItemFormProps> = memo((props) => {
                    className={inputError ? 'input-error' : ''}
             />
 
-            <Button callback={addTaskHandler} title={'+'} isDisabled={!title}/>
+            <Button callback={addTaskHandler} title={'+'} disabled={!title}/>
             {inputError && <div className={'error'}>Error: title is required</div>}
         </div>
     );

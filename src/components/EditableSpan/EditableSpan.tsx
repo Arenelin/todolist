@@ -3,10 +3,11 @@ import React, {ChangeEvent, memo, useState} from 'react';
 export type EditableSpanProps = {
     oldTitle: string
     callback: (title: string) => void
+    disabled?: boolean
 }
 
 export const EditableSpan: React.FC<EditableSpanProps> = memo((props) => {
-    const {oldTitle, callback} = props;
+    const {oldTitle, callback, disabled} = props;
 
     const [editMode, setEditMode] = useState<boolean>(false);
     const [editableTitle, setEditableTitle] = useState(oldTitle);
@@ -25,7 +26,9 @@ export const EditableSpan: React.FC<EditableSpanProps> = memo((props) => {
             value={editableTitle}
             autoFocus
             onBlur={changeEditMode}
-            onChange={onChangeTitleHandler}/>
+            onChange={onChangeTitleHandler}
+            disabled={disabled}
+        />
         : <span onDoubleClick={changeEditMode}>{oldTitle}</span>
         ;
 });

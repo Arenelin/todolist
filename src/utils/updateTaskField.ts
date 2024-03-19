@@ -7,7 +7,6 @@ export const updateTaskField = (task: TaskType, model: ModelType) => {
     return {
         title: task.title,
         description: task.description,
-        completed: task.completed,
         status: task.status,
         priority: task.priority,
         startDate: task.startDate,

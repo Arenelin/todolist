@@ -13,11 +13,16 @@ export type TodolistType = {
     title: string
 }
 
-type ResponseType<T = {}> = {
+export type ResponseType<T = {}> = {
     fieldsErrors: string[]
     messages: string[]
     resultCode: number
     data: T
+}
+
+export enum Result_Code{
+    SUCCEEDED,
+    FAILED
 }
 
 // api
