@@ -3,6 +3,7 @@ import {authAPI, AuthDataType} from "../../api/auth-api";
 import {handleServerAppError, handleServerNetworkError} from "../../utils/error-utils";
 import {setAppStatus} from "../../App/app-reducer/app-reducer";
 import {Result_Code} from "../../api/todolists-api";
+import {clearData} from "../Todolists/todolistsReducer/todolists-reducer";
 
 // types
 const initialState = {
@@ -49,6 +50,7 @@ export const logout = () => (dispatch: AppDispatch) => {
                 handleServerAppError(res.data, dispatch)
             } else {
                 dispatch(setIsLoggedIn(false))
+                dispatch(clearData())
             }
         })
         .catch(error => handleServerNetworkError(error.message, dispatch))

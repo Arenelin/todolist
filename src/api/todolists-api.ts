@@ -15,14 +15,12 @@ export type TodolistType = {
     addedDate: string
     order: number
 }
-
 type ResponseType<D = {}> = {
     data: D
     fieldsErrors: string[]
     messages: string[]
     resultCode: number
 }
-
 export enum Result_Code{
     SUCCEEDED,
     ERROR

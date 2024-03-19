@@ -22,7 +22,7 @@ export type AppRootState = ReturnType<typeof rootReducer> //Синтаксиче
 export type RootState = ReturnType<typeof store.getState>
 export type AppDispatch = ThunkDispatch<AppRootState, unknown, AnyAction>
 export type AppThunk<ReturnType = void> = ThunkAction<
-    ReturnType,
+    void,
     RootState,
     unknown,
     AnyAction

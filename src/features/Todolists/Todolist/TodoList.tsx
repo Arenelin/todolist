@@ -30,7 +30,7 @@ export const TodoList: React.FC<TodoListProps> = memo((props) => {
                 : <Task key={t.id} taskId={t.id} todolistId={todolist.id}/>
         }
     )
-
+// debugger
     return (
         <div>
             <div>

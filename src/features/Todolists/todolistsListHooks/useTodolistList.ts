@@ -9,9 +9,9 @@ export const useTodolistList = (demo: boolean) => {
         useAppSelector<TodolistDomainType[]>(state => state.todolists)
     const isLoggedIn = useAppSelector<boolean>(state => state.auth.isLoggedIn)
 
-
     useEffect(() => {
         if (!demo && isLoggedIn) {
+            // debugger
             dispatch(getTodolists())
         }
     }, []);

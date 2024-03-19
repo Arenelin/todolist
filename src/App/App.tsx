@@ -19,11 +19,10 @@ export const App: React.FC<AppProps> = (props) => {
     const dispatch = useAppDispatch()
     const {demo = false} = props;
     const {status, isInitialized} = useApp()
-
     useEffect(() => {
         dispatch(initializeApp())
     }, []);
-
+// debugger
     if (!isInitialized) {
         return <LoadingCircle/>
     }

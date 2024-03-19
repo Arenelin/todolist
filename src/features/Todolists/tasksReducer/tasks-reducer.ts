@@ -1,4 +1,4 @@
-import {AddTodolist, DeleteTodolist, SetTodolists} from '../todolistsReducer/todolists-reducer';
+import {AddTodolist, ClearData, DeleteTodolist, SetTodolists} from '../todolistsReducer/todolists-reducer';
 import {TaskPriorities, tasksAPI, TaskStatuses, TaskType, UpdateTaskModel} from '../../../api/tasks-api';
 import {AppDispatch, AppRootState} from '../../../App/store';
 import {createTaskModel} from '../../../utils/createTaskModel';
@@ -26,6 +26,7 @@ type ActionsType =
     | AddTodolist
     | DeleteTodolist
     | SetTodolists
+    | ClearData
     | ReturnType<typeof deleteTask>
     | ReturnType<typeof addNewTask>
     | ReturnType<typeof setTasks>
@@ -63,10 +64,12 @@ export const tasksReducer = (state: TasksState = initialState, action: ActionsTy
             return stateCopy
         }
         case 'SET-TODOLISTS':
+            // debugger
             const stateCopy = {...state}
             action.payload.todolists.forEach(t => stateCopy[t.id] = [])
             return stateCopy
         case 'SET-TASKS':
+            // debugger
             return {
                 ...state,
                 [action.payload.todolistId]: action.payload.tasks.map(t => ({...t, entityStatus: 'idle'}))
@@ -80,6 +83,8 @@ export const tasksReducer = (state: TasksState = initialState, action: ActionsTy
                         : t
                     )
             }
+        case "CLEAR-DATA":
+            return {}
         default:
             return state
     }

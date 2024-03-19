@@ -14,8 +14,8 @@ export const TodolistsList: React.FC<TodolistsListProps> = (props) => {
     const {todolists, addNewTodolist, logoutHandler, isLoggedIn} = useTodolistList(demo)
     const listTodolists = todolists.map(tl =>
         <TodoList key={tl.id} todolist={tl} demo={demo}/>)
-
     if (!isLoggedIn) return <Navigate to={'/login'}/>
+    // debugger
     return (
         <>
             <AddItemForm callback={addNewTodolist}/>

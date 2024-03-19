@@ -11,12 +11,12 @@ import {useAppDispatch, useAppSelector} from '../../../../hooks/hooks';
 
 export const useTodolist = (todolist: TodolistDomainType, demo: boolean) => {
     const dispatch = useAppDispatch();
-
-    useEffect(() => {
-        if (!demo) {
-            dispatch(getTasks(todolist.id))
-        }
-    }, []);
+    // useEffect(() => {
+    //     if (!demo) {
+    //         debugger
+    //         dispatch(getTasks(todolist.id))
+    //     }
+    // }, []);
 
     const tasks =
         useAppSelector<TaskDomainType[]>(state => state.tasks[todolist.id])
