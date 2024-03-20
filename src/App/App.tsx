@@ -22,7 +22,7 @@ export const App: React.FC<AppProps> = (props) => {
     useEffect(() => {
         dispatch(initializeApp())
     }, []);
-// debugger
+debugger
     if (!isInitialized) {
         return <LoadingCircle/>
     }

@@ -13,7 +13,7 @@ type TodoListProps = {
 }
 
 export const TodoList: React.FC<TodoListProps> = memo((props) => {
-    const {todolist, demo = false} = props;
+    const {todolist} = props;
     const {
         tasksForTodoList,
         addTaskForCurrentTodolist,
@@ -22,7 +22,7 @@ export const TodoList: React.FC<TodoListProps> = memo((props) => {
         changeAllFilterHandler,
         changeActiveFilterHandler,
         changeCompletedFilterHandler
-    } = useTodolist(todolist, demo)
+    } = useTodolist(todolist)
 
     const tasksList: JSX.Element[] = tasksForTodoList.map(t => {
             return todolist.entityStatus === 'loading'
@@ -30,7 +30,6 @@ export const TodoList: React.FC<TodoListProps> = memo((props) => {
                 : <Task key={t.id} taskId={t.id} todolistId={todolist.id}/>
         }
     )
-// debugger
     return (
         <div>
             <div>

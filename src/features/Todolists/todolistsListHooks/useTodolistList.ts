@@ -11,7 +11,6 @@ export const useTodolistList = (demo: boolean) => {
 
     useEffect(() => {
         if (!demo && isLoggedIn) {
-            // debugger
             dispatch(getTodolists())
         }
     }, []);

@@ -64,12 +64,12 @@ export const tasksReducer = (state: TasksState = initialState, action: ActionsTy
             return stateCopy
         }
         case 'SET-TODOLISTS':
-            // debugger
+            debugger
             const stateCopy = {...state}
             action.payload.todolists.forEach(t => stateCopy[t.id] = [])
             return stateCopy
         case 'SET-TASKS':
-            // debugger
+            debugger
             return {
                 ...state,
                 [action.payload.todolistId]: action.payload.tasks.map(t => ({...t, entityStatus: 'idle'}))

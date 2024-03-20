@@ -1,5 +1,5 @@
-import {useCallback, useEffect} from 'react';
-import {addTask, getTasks, TaskDomainType} from '../../tasksReducer/tasks-reducer';
+import {useCallback} from 'react';
+import {addTask, TaskDomainType} from '../../tasksReducer/tasks-reducer';
 import {
     changeTodolistFilter,
     removeTodolist,
@@ -9,14 +9,8 @@ import {
 import {TaskStatuses} from '../../../../api/tasks-api';
 import {useAppDispatch, useAppSelector} from '../../../../hooks/hooks';
 
-export const useTodolist = (todolist: TodolistDomainType, demo: boolean) => {
+export const useTodolist = (todolist: TodolistDomainType) => {
     const dispatch = useAppDispatch();
-    // useEffect(() => {
-    //     if (!demo) {
-    //         debugger
-    //         dispatch(getTasks(todolist.id))
-    //     }
-    // }, []);
 
     const tasks =
         useAppSelector<TaskDomainType[]>(state => state.tasks[todolist.id])
