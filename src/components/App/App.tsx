@@ -1,7 +1,7 @@
 import React, {useCallback, useEffect} from 'react';
 import '../../App.css';
 import {AddItemForm} from '../AddItemForm/AddItemForm';
-import {createTodolist, getTodolists, TodolistDomainType} from '../../reducers/todolists-reducer';
+import {createTodolist, getTodolists, TodolistDomainType} from '../../reducers/todolist-reducer';
 import {useAppDispatch, useAppSelector} from '../../hooks/hooks';
 import {Todolist} from "../Todolist";
 import {RequestStatusType} from "../../reducers/app-reducer";
@@ -27,7 +27,7 @@ function App() {
     return (
         <div className="App">
             <ErrorSnackbar/>
-            <AddItemForm callback={addNewTodolist}/>
+            <AddItemForm  callback={addNewTodolist}/>
             {status === 'loading' && <Stack sx={{ width: '100%', color: 'grey.500' }} spacing={2}>
                 <LinearProgress color="secondary" />
             </Stack>}

@@ -1,4 +1,4 @@
-import {AddTodolist, RemoveTodolist, SetTodolists} from './todolists-reducer';
+import {AddTodolist, RemoveTodolist, SetTodolists} from './todolist-reducer';
 import {AppDispatch, AppRootState} from "../store/store";
 import {DomainModelTaskType, tasksApi, TaskType} from "../api/tasks-api";
 import {updateTaskField} from "../utils/updateTaskField";
@@ -7,21 +7,15 @@ import {Result_Code} from "../api/todolists-api";
 import {handleServerAppError, handleServerNetworkError} from "../utils/error-utils";
 
 // types
-type TasksReducer =
+type TasksActionsType =
     | RemoveTodolist
-    | RemoveTask
-    | AddNewTask
-    | ChangeTask
     | AddTodolist
     | SetTodolists
-    | SetTasks
-    | SetTaskEntityStatus
-
-type RemoveTask = ReturnType<typeof deleteTask>
-type AddNewTask = ReturnType<typeof addNewTask>
-type ChangeTask = ReturnType<typeof changeTask>
-type SetTasks = ReturnType<typeof setTasks>
-type SetTaskEntityStatus = ReturnType<typeof setTaskEntityStatus>
+    | ReturnType<typeof deleteTask>
+    | ReturnType<typeof addNewTask>
+    | ReturnType<typeof changeTask>
+    | ReturnType<typeof setTasks>
+    | ReturnType<typeof setTaskEntityStatus>
 
 export type ModelTaskType = {
     title?: string
@@ -32,15 +26,16 @@ export type ModelTaskType = {
     deadline?: string
 }
 
-export type TaskDomainType = TaskType & { entityStatus: RequestStatusType }
-
+export type TaskDomainType = TaskType & {
+    entityStatus: RequestStatusType
+}
 export type TaskObjType = {
     [key: string]: TaskDomainType[]
 }
 const initialState: TaskObjType = {}
 
 // reducer
-export const tasksReducer = (state: TaskObjType = initialState, action: TasksReducer): TaskObjType => {
+export const tasksReducer = (state: TaskObjType = initialState, action: TasksActionsType): TaskObjType => {
     switch (action.type) {
         case 'REMOVE-TASK':
             return {
@@ -93,41 +88,19 @@ export const tasksReducer = (state: TaskObjType = initialState, action: TasksRed
 }
 
 // actions
-export const deleteTask = (todolistId: string, taskId: string) => {
-    return {
-        type: 'REMOVE-TASK',
-        payload: {todolistId, taskId}
-    } as const
-}
-export const setTasks = (todolistId: string, tasks: TaskType[]) => {
-    return {
-        type: 'SET-TASKS',
-        payload: {todolistId, tasks}
-    } as const
-}
+export const deleteTask = (todolistId: string, taskId: string) =>
+    ({type: 'REMOVE-TASK', payload: {todolistId, taskId}} as const)
+export const setTasks = (todolistId: string, tasks: TaskType[]) =>
+    ({type: 'SET-TASKS', payload: {todolistId, tasks}} as const)
+export const addNewTask = (task: TaskType) =>
+    ({type: 'ADD-TASK', payload: {task}} as const)
+export const changeTask = (task: TaskType) =>
+    ({type: 'CHANGE-TASK', payload: {task}} as const)
 
-export const addNewTask = (task: TaskType) => {
-    return {
-        type: 'ADD-TASK',
-        payload: {task}
-    } as const
-}
-export const changeTask = (task: TaskType) => {
-    return {
-        type: 'CHANGE-TASK',
-        payload: {task}
-    } as const
-}
-export const setTaskEntityStatus = (todolistId: string, id: string, status: RequestStatusType) => {
-    return {
-        type: 'SET-TASK-ENTITY-STATUS',
-        payload: {todolistId, id, status}
-    } as const
-}
-
+export const setTaskEntityStatus = (todolistId: string, id: string, status: RequestStatusType) =>
+    ({type: 'SET-TASK-ENTITY-STATUS', payload: {todolistId, id, status}} as const)
 
 // thunks
-
 export const getTasks = (todolistId: string) => (dispatch: AppDispatch) => {
     tasksApi.getTasks(todolistId)
         .then(res => {

@@ -13,7 +13,6 @@ export const ErrorSnackbar = () => {
         }
         dispatch(setAppError(null))
     };
-
     return (
         <div>
             <Snackbar open={!!error} autoHideDuration={6000} onClose={handleClose}>

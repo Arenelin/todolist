@@ -3,7 +3,7 @@ import {Button} from '../Button';
 
 export type AddItemFormProps = {
     callback: (title: string) => void
-    disabled:boolean
+    disabled?: boolean
 }
 
 export const AddItemForm: React.FC<AddItemFormProps> = memo((props) => {

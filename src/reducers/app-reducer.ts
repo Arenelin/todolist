@@ -24,25 +24,7 @@ export const appReducer = (state: InitialStateType = initialState, action: AppAc
 }
 
 // actions
-export const setAppStatus = (status: RequestStatusType) => {
-    return {
-        type: 'SET-APP-STATUS',
-        payload: {status}
-    } as const
-}
-export const setAppError = (error: ErrorType) => {
-    return {
-        type: 'SET-APP-ERROR',
-        payload: {error}
-    } as const
-}
-
-
-// thunks
-
-// export const getTasks = (todolistId: string) => (dispatch: AppDispatch) => {
-//     tasksApi.getTasks(todolistId)
-//         .then(res => {
-//             dispatch(setTasks(todolistId, res.data.items))
-//         })
-// }
+export const setAppStatus = (status: RequestStatusType) =>
+    ({type: 'SET-APP-STATUS', payload: {status}} as const)
+export const setAppError = (error: ErrorType) =>
+    ({type: 'SET-APP-ERROR', payload: {error}} as const)

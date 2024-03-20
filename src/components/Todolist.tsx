@@ -3,7 +3,7 @@ import {Button} from './Button';
 import {AddItemForm} from './AddItemForm/AddItemForm';
 import {EditableSpan} from './EditableSpan/EditableSpan';
 import {addTask, getTasks, TaskDomainType} from '../reducers/tasks-reducer';
-import {changeTodolistFilter, removeTodolist, TodolistDomainType, updateTodolist} from '../reducers/todolists-reducer';
+import {changeTodolistFilter, removeTodolist, TodolistDomainType, updateTodolist} from '../reducers/todolist-reducer';
 import {Task} from './Task/Task';
 import {useAppDispatch, useAppSelector} from "../hooks/hooks";
 import {TaskStatuses} from "../api/tasks-api";
@@ -15,7 +15,6 @@ type TodolistProps = {
 
 export const Todolist: React.FC<TodolistProps> = memo((props) => {
     const {todolist} = props;
-
     const dispatch = useAppDispatch()
     const tasks =
         useAppSelector<TaskDomainType[]>(state => state.tasks[todolist.id])

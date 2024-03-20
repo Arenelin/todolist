@@ -5,7 +5,7 @@ import {
     changeTodolistFilter,
     deleteTodolist,
     todolistsReducer
-} from './todolists-reducer';
+} from './todolist-reducer';
 import {FilterValuesType, todolistType} from '../components/App/App';
 
 test('correct todolist should be removed', () => {
