@@ -1,4 +1,4 @@
-import {AddTodolist, RemoveTodolist, SetTodolists} from './todolist-reducer';
+import {AddTodolist, ClearData, RemoveTodolist, SetTodolists} from './todolist-reducer';
 import {AppDispatch, AppRootState} from "../store/store";
 import {DomainModelTaskType, tasksApi, TaskType} from "../api/tasks-api";
 import {updateTaskField} from "../utils/updateTaskField";
@@ -11,6 +11,7 @@ type TasksActionsType =
     | RemoveTodolist
     | AddTodolist
     | SetTodolists
+    | ClearData
     | ReturnType<typeof deleteTask>
     | ReturnType<typeof addNewTask>
     | ReturnType<typeof changeTask>
@@ -82,6 +83,8 @@ export const tasksReducer = (state: TaskObjType = initialState, action: TasksAct
                         ? {...t, entityStatus: action.payload.status}
                         : t)
             }
+        case "CLEAR-DATA":
+            return {}
         default:
             return state
     }

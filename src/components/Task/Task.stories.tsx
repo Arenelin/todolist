@@ -3,7 +3,7 @@ import {Task} from './Task';
 import ReduxStoreProviderDecorator from '../../stories/decorators/ReduxStoreProviderDecorator';
 import {useSelector} from 'react-redux';
 import {AppRootState} from '../../store/store';
-import {TaskType} from '../Todolist';
+// import {TaskType} from '../Todolist';
 
 const meta: Meta<typeof Task> = {
     title: 'Todolist/Task',
@@ -37,10 +37,10 @@ export const TaskDefaultStory: Story = {
     }
 };
 
-const TaskContainer = () => {
-    let task = useSelector<AppRootState, TaskType>(state => state.tasks['todolistId1'][0])
-    return <Task taskId={task.id} todolistId={'todolistId1'}/>
-}
+// const TaskContainer = () => {
+//     let task = useSelector<AppRootState, TaskType>(state => state.tasks['todolistId1'][0])
+//     return <Task taskId={task.id} todolistId={'todolistId1'}/>
+// }
 
 //Надо дописать!
 

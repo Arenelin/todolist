@@ -2,12 +2,14 @@ import {Result_Code, todolistsApi, TodolistType} from '../api/todolists-api';
 import {AppDispatch} from '../store/store';
 import {RequestStatusType, setAppStatus} from "./app-reducer";
 import {handleServerAppError, handleServerNetworkError} from "../utils/error-utils";
+import {getTasks} from "./tasks-reducer";
 
 // types
 type TodolistsActionsType =
     | RemoveTodolist
     | SetTodolists
     | AddTodolist
+    | ClearData
     | ReturnType<typeof changeTodolistFilter>
     | ReturnType<typeof changeTitleForTodolist>
     | ReturnType<typeof setTodolistEntityStatus>
@@ -15,6 +17,7 @@ type TodolistsActionsType =
 export type RemoveTodolist = ReturnType<typeof deleteTodolist>
 export type AddTodolist = ReturnType<typeof addTodolist>
 export type SetTodolists = ReturnType<typeof setTodolists>
+export type ClearData = ReturnType<typeof clearData>
 
 export type FilterValuesType = 'all' | 'active' | 'completed';
 export type TodolistDomainType = TodolistType & {
@@ -45,6 +48,8 @@ export const todolistsReducer = (state: TodolistDomainType[] = initialState, act
             return state.map(t => t.id === action.payload.id
                 ? {...t, entityStatus: action.payload.status}
                 : t)
+        case "CLEAR-DATA":
+            return []
         default:
             return state;
     }
@@ -63,6 +68,8 @@ export const setTodolists = (todolists: TodolistType[]) =>
     ({type: 'SET-TODOLISTS', payload: {todolists}} as const)
 export const setTodolistEntityStatus = (id: string, status: RequestStatusType) =>
     ({type: 'SET-TODOLIST-ENTITY-STATUS', payload: {id, status}} as const)
+export const clearData = () =>
+    ({type: 'CLEAR-DATA'} as const)
 
 
 // thunks
@@ -71,6 +78,11 @@ export const getTodolists = () => (dispatch: AppDispatch) => {
     todolistsApi.getTodolists()
         .then(res => {
             dispatch(setTodolists(res.data))
+            dispatch(setAppStatus('succeeded'))
+            return res.data
+        })
+        .then(todolists => {
+            todolists.map(t => dispatch(getTasks(t.id)))
         })
         .catch(e => handleServerNetworkError(e.message, dispatch))
 }
